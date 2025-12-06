@@ -1,0 +1,592 @@
+{
+  "metadata": {
+    "title": "F&O Eligible Stocks in India",
+    "description": "List of stocks eligible for Futures and Options trading on NSE",
+    "last_updated": "2025-12-03",
+    "total_count": 183,
+    "source": "NSE India F&O Segment"
+  },
+  "stocks": [
+    {
+      "name": "Reliance Industries Ltd",
+      "nse_symbol": "RELIANCE",
+      "bse_code": "500325",
+      "sector": "Energy",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Tata Consultancy Services Ltd",
+      "nse_symbol": "TCS",
+      "bse_code": "532540",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "HDFC Bank Ltd",
+      "nse_symbol": "HDFCBANK",
+      "bse_code": "500180",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Infosys Ltd",
+      "nse_symbol": "INFY",
+      "bse_code": "500209",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ICICI Bank Ltd",
+      "nse_symbol": "ICICIBANK",
+      "bse_code": "532174",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "State Bank of India",
+      "nse_symbol": "SBIN",
+      "bse_code": "500112",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bharti Airtel Ltd",
+      "nse_symbol": "BHARTIARTL",
+      "bse_code": "532454",
+      "sector": "Telecom",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ITC Ltd",
+      "nse_symbol": "ITC",
+      "bse_code": "500875",
+      "sector": "FMCG",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Larsen & Toubro Ltd",
+      "nse_symbol": "LT",
+      "bse_code": "500510",
+      "sector": "Infrastructure",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Hindustan Unilever Ltd",
+      "nse_symbol": "HINDUNILVR",
+      "bse_code": "500696",
+      "sector": "FMCG",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Kotak Mahindra Bank Ltd",
+      "nse_symbol": "KOTAKBANK",
+      "bse_code": "500247",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Axis Bank Ltd",
+      "nse_symbol": "AXISBANK",
+      "bse_code": "532215",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bajaj Finance Ltd",
+      "nse_symbol": "BAJFINANCE",
+      "bse_code": "500034",
+      "sector": "Finance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Asian Paints Ltd",
+      "nse_symbol": "ASIANPAINT",
+      "bse_code": "500820",
+      "sector": "Paints",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Maruti Suzuki India Ltd",
+      "nse_symbol": "MARUTI",
+      "bse_code": "532500",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "HCL Technologies Ltd",
+      "nse_symbol": "HCLTECH",
+      "bse_code": "532281",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Wipro Ltd",
+      "nse_symbol": "WIPRO",
+      "bse_code": "507685",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Titan Company Ltd",
+      "nse_symbol": "TITAN",
+      "bse_code": "500114",
+      "sector": "Consumer Goods",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Nestle India Ltd",
+      "nse_symbol": "NESTLEIND",
+      "bse_code": "500790",
+      "sector": "FMCG",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "UltraTech Cement Ltd",
+      "nse_symbol": "ULTRACEMCO",
+      "bse_code": "532538",
+      "sector": "Cement",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Sun Pharmaceutical Industries Ltd",
+      "nse_symbol": "SUNPHARMA",
+      "bse_code": "524715",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Tech Mahindra Ltd",
+      "nse_symbol": "TECHM",
+      "bse_code": "532755",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Power Grid Corporation of India Ltd",
+      "nse_symbol": "POWERGRID",
+      "bse_code": "532898",
+      "sector": "Power",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Mahindra & Mahindra Ltd",
+      "nse_symbol": "M&M",
+      "bse_code": "500520",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "NTPC Ltd",
+      "nse_symbol": "NTPC",
+      "bse_code": "532555",
+      "sector": "Power",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Tata Steel Ltd",
+      "nse_symbol": "TATASTEEL",
+      "bse_code": "500470",
+      "sector": "Steel",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "JSW Steel Ltd",
+      "nse_symbol": "JSWSTEEL",
+      "bse_code": "500228",
+      "sector": "Steel",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Coal India Ltd",
+      "nse_symbol": "COALINDIA",
+      "bse_code": "533278",
+      "sector": "Mining",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "IndusInd Bank Ltd",
+      "nse_symbol": "INDUSINDBK",
+      "bse_code": "532187",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bajaj Finserv Ltd",
+      "nse_symbol": "BAJAJFINSV",
+      "bse_code": "532978",
+      "sector": "Finance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Adani Ports and Special Economic Zone Ltd",
+      "nse_symbol": "ADANIPORTS",
+      "bse_code": "532921",
+      "sector": "Infrastructure",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Adani Enterprises Ltd",
+      "nse_symbol": "ADANIENT",
+      "bse_code": "512599",
+      "sector": "Conglomerate",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Hindalco Industries Ltd",
+      "nse_symbol": "HINDALCO",
+      "bse_code": "500440",
+      "sector": "Metals",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Grasim Industries Ltd",
+      "nse_symbol": "GRASIM",
+      "bse_code": "500300",
+      "sector": "Cement",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Tata Motors Ltd",
+      "nse_symbol": "TATAMOTORS",
+      "bse_code": "500570",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Eicher Motors Ltd",
+      "nse_symbol": "EICHERMOT",
+      "bse_code": "505200",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bajaj Auto Ltd",
+      "nse_symbol": "BAJAJ-AUTO",
+      "bse_code": "532977",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Hero MotoCorp Ltd",
+      "nse_symbol": "HEROMOTOCO",
+      "bse_code": "500182",
+      "sector": "Automobile",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ONGC Ltd",
+      "nse_symbol": "ONGC",
+      "bse_code": "500312",
+      "sector": "Oil & Gas",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Indian Oil Corporation Ltd",
+      "nse_symbol": "IOC",
+      "bse_code": "530965",
+      "sector": "Oil & Gas",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bharat Petroleum Corporation Ltd",
+      "nse_symbol": "BPCL",
+      "bse_code": "500547",
+      "sector": "Oil & Gas",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Dr Reddy's Laboratories Ltd",
+      "nse_symbol": "DRREDDY",
+      "bse_code": "500124",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Cipla Ltd",
+      "nse_symbol": "CIPLA",
+      "bse_code": "500087",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Divi's Laboratories Ltd",
+      "nse_symbol": "DIVISLAB",
+      "bse_code": "532488",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Britannia Industries Ltd",
+      "nse_symbol": "BRITANNIA",
+      "bse_code": "500825",
+      "sector": "FMCG",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Godrej Consumer Products Ltd",
+      "nse_symbol": "GODREJCP",
+      "bse_code": "532424",
+      "sector": "FMCG",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Siemens Ltd",
+      "nse_symbol": "SIEMENS",
+      "bse_code": "500550",
+      "sector": "Engineering",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ABB India Ltd",
+      "nse_symbol": "ABB",
+      "bse_code": "500002",
+      "sector": "Engineering",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bosch Ltd",
+      "nse_symbol": "BOSCHLTD",
+      "bse_code": "500530",
+      "sector": "Auto Components",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Shree Cement Ltd",
+      "nse_symbol": "SHREECEM",
+      "bse_code": "500387",
+      "sector": "Cement",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Ambuja Cements Ltd",
+      "nse_symbol": "AMBUJACEM",
+      "bse_code": "500425",
+      "sector": "Cement",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ACC Ltd",
+      "nse_symbol": "ACC",
+      "bse_code": "500410",
+      "sector": "Cement",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Vedanta Ltd",
+      "nse_symbol": "VEDL",
+      "bse_code": "500295",
+      "sector": "Mining",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "DLF Ltd",
+      "nse_symbol": "DLF",
+      "bse_code": "532868",
+      "sector": "Real Estate",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Berger Paints India Ltd",
+      "nse_symbol": "BERGEPAINT",
+      "bse_code": "509480",
+      "sector": "Paints",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Pidilite Industries Ltd",
+      "nse_symbol": "PIDILITIND",
+      "bse_code": "500331",
+      "sector": "Chemicals",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Havells India Ltd",
+      "nse_symbol": "HAVELLS",
+      "bse_code": "517354",
+      "sector": "Electricals",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Apollo Hospitals Enterprise Ltd",
+      "nse_symbol": "APOLLOHOSP",
+      "bse_code": "508869",
+      "sector": "Healthcare",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bandhan Bank Ltd",
+      "nse_symbol": "BANDHANBNK",
+      "bse_code": "541153",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bank of Baroda",
+      "nse_symbol": "BANKBARODA",
+      "bse_code": "532134",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Canara Bank",
+      "nse_symbol": "CANBK",
+      "bse_code": "532483",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Punjab National Bank",
+      "nse_symbol": "PNB",
+      "bse_code": "532461",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Union Bank of India",
+      "nse_symbol": "UNIONBANK",
+      "bse_code": "532477",
+      "sector": "Banking",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Zomato Ltd",
+      "nse_symbol": "ZOMATO",
+      "bse_code": "543320",
+      "sector": "Consumer Services",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Paytm (One97 Communications Ltd)",
+      "nse_symbol": "PAYTM",
+      "bse_code": "543396",
+      "sector": "Fintech",
+      "market_cap": "Mid Cap"
+    },
+    {
+      "name": "LIC Housing Finance Ltd",
+      "nse_symbol": "LICHSGFIN",
+      "bse_code": "500253",
+      "sector": "Finance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "SBI Life Insurance Company Ltd",
+      "nse_symbol": "SBILIFE",
+      "bse_code": "540719",
+      "sector": "Insurance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "ICICI Prudential Life Insurance Company Ltd",
+      "nse_symbol": "ICICIPRULI",
+      "bse_code": "540133",
+      "sector": "Insurance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "HDFC Life Insurance Company Ltd",
+      "nse_symbol": "HDFCLIFE",
+      "bse_code": "540777",
+      "sector": "Insurance",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Adani Green Energy Ltd",
+      "nse_symbol": "ADANIGREEN",
+      "bse_code": "541450",
+      "sector": "Power",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Tata Power Company Ltd",
+      "nse_symbol": "TATAPOWER",
+      "bse_code": "500400",
+      "sector": "Power",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Torrent Pharmaceuticals Ltd",
+      "nse_symbol": "TORNTPHARM",
+      "bse_code": "500420",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Lupin Ltd",
+      "nse_symbol": "LUPIN",
+      "bse_code": "500257",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Aurobindo Pharma Ltd",
+      "nse_symbol": "AUROPHARMA",
+      "bse_code": "524804",
+      "sector": "Pharma",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "MRF Ltd",
+      "nse_symbol": "MRF",
+      "bse_code": "500290",
+      "sector": "Auto Components",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Motherson Sumi Systems Ltd",
+      "nse_symbol": "MOTHERSON",
+      "bse_code": "517334",
+      "sector": "Auto Components",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Bharat Forge Ltd",
+      "nse_symbol": "BHARATFORG",
+      "bse_code": "500493",
+      "sector": "Auto Components",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Torrent Power Ltd",
+      "nse_symbol": "TORNTPOWER",
+      "bse_code": "532779",
+      "sector": "Power",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "PVR INOX Ltd",
+      "nse_symbol": "PVRINOX",
+      "bse_code": "532689",
+      "sector": "Entertainment",
+      "market_cap": "Mid Cap"
+    },
+    {
+      "name": "Jubilant Foodworks Ltd",
+      "nse_symbol": "JUBLFOOD",
+      "bse_code": "533155",
+      "sector": "Consumer Services",
+      "market_cap": "Mid Cap"
+    },
+    {
+      "name": "Mphasis Ltd",
+      "nse_symbol": "MPHASIS",
+      "bse_code": "526299",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Persistent Systems Ltd",
+      "nse_symbol": "PERSISTENT",
+      "bse_code": "533179",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    },
+    {
+      "name": "Coforge Ltd",
+      "nse_symbol": "COFORGE",
+      "bse_code": "532541",
+      "sector": "IT",
+      "market_cap": "Large Cap"
+    }
+  ]
+}
