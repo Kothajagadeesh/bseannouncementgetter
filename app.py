@@ -18,8 +18,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import hashlib
+from openai import OpenAI
 
 app = Flask(__name__)
+
+# Initialize OpenAI client
+client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
 
 # Cache for announcements
 announcements_cache = []
@@ -144,10 +148,14 @@ def fetch_bse_live_api(days_back=1, max_results=200):
         api_url = 'https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w'
         
         # Get date range in YYYYMMDD format
-        from_date = (datetime.now() - timedelta(days=days_back)).strftime('%Y%m%d')
+        # For days_back=1 (default), fetch only today's announcements
         to_date = datetime.now().strftime('%Y%m%d')
+        if days_back <= 1:
+            from_date = to_date  # Only today
+        else:
+            from_date = (datetime.now() - timedelta(days=days_back-1)).strftime('%Y%m%d')
         
-        print(f"Fetching announcements from {from_date} to {to_date}")
+        print(f"Fetching announcements from {from_date} to {to_date} (Today only)" if from_date == to_date else f"Fetching announcements from {from_date} to {to_date}")
         
         params = {
             'strCat': '-1',  # All categories
@@ -182,10 +190,7 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                     total_available = len(table_data)
                     
                     print(f"\n✅ BSE API SUCCESS! Found {total_available} announcements")
-                    print("Filtering for F&O eligible stocks only...")
-                    
-                    fo_filtered = 0
-                    non_fo_skipped = 0
+                    print("Processing all announcements...")
                     
                     for item in table_data[:max_results]:
                         # Extract data from API response
@@ -228,13 +233,15 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                             # ATTACHMENTNAME already includes .pdf extension
                             pdf_link = f"https://www.bseindia.com/xml-data/corpfiling/AttachLive/{attachment_name}"
                         
-                        # Check if stock is F&O eligible
-                        if not is_fo_eligible(bse_code):
-                            non_fo_skipped += 1
-                            continue  # Skip non-F&O stocks
+                        # Check if stock is F&O eligible (for display purposes only)
+                        is_fo = is_fo_eligible(bse_code)
                         
-                        # Get market cap category (only for F&O stocks)
-                        market_cap_info = get_market_cap_with_cache(bse_code)
+                        # Get market cap category
+                        market_cap_info = get_market_cap_with_cache(bse_code) if is_fo else {
+                            'category': 'Unknown',
+                            'emoji': '⚪',
+                            'color': '#6b7280'
+                        }
                         
                         # Don't download PDF here - will download on-demand when user clicks Summarize
                         # Check if PDF already exists locally from previous downloads
@@ -250,7 +257,6 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                                 if existing_files:
                                     local_pdf_path = os.path.join(folder_path, existing_files[0])
                         
-                        fo_filtered += 1
                         announcements.append({
                             'company_name': company_name,
                             'bse_code': bse_code,
@@ -259,16 +265,11 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                             'date_time': formatted_date,
                             'raw_timestamp': raw_timestamp,
                             'market_cap': market_cap_info,
-                            'is_fo_eligible': True,
+                            'is_fo_eligible': is_fo,
                             'summary': None
                         })
                     
-                    # Print filtering results
-                    print(f"✅ F&O Filter Results:")
-                    print(f"   - F&O Eligible: {fo_filtered} announcements")
-                    print(f"   - Non-F&O Skipped: {non_fo_skipped} announcements")
-                    print(f"   - Total Returned: {len(announcements)} F&O stocks only")
-                    
+                    print(f"✅ Processed {len(announcements)} announcements")
                     return announcements
                 else:
                     print(f"Unexpected data structure: {list(data.keys()) if isinstance(data, dict) else type(data)}")
@@ -424,7 +425,7 @@ def get_sample_announcements():
     ]
 
 def fetch_bse_announcements(days_back=1, max_results=200):
-    """Fetch announcements with fallback mechanism - LIVE DATA
+    """Fetch announcements from BSE - LIVE DATA
     
     Args:
         days_back: Number of days to look back (default: 1 - today only)
@@ -434,7 +435,7 @@ def fetch_bse_announcements(days_back=1, max_results=200):
     print(f"FETCHING LIVE BSE ANNOUNCEMENTS (Last {days_back} days, max {max_results} results)...")
     print("="*80)
     
-    # Try BSE Live API first (REAL DATA)
+    # Fetch from BSE Live API (REAL DATA)
     announcements = fetch_bse_live_api(days_back=days_back, max_results=max_results)
     
     if announcements:
@@ -442,17 +443,7 @@ def fetch_bse_announcements(days_back=1, max_results=200):
         print("="*80 + "\n")
         return announcements
     
-    print("⚠️ BSE API failed, trying NSE India...")
-    
-    # Try NSE as alternative (ALSO REAL DATA)
-    announcements = fetch_nse_announcements()
-    
-    if announcements:
-        print(f"✅ SUCCESS! Fetched {len(announcements)} LIVE announcements from NSE India")
-        print("="*80 + "\n")
-        return announcements
-    
-    print("❌ All live sources failed, using sample data for demonstration")
+    print("❌ BSE API failed, using sample data for demonstration")
     print("="*80 + "\n")
     
     # Return sample data as last resort
@@ -477,18 +468,12 @@ def extract_text_from_pdf(pdf_url):
         print(f"Error extracting PDF: {str(e)}")
         return ""
 
-def analyze_announcement(text, company_name):
-    """Analyze announcement and generate summary"""
-    if not text:
-        return {
-            'summary': f"Unable to extract content from the announcement PDF for {company_name}.",
-            'sentiment': 'neutral'
-        }
-    
+def analyze_with_python(text, company_name):
+    """Python-based keyword analysis (fallback when OpenAI is not available)"""
     # Simple keyword-based analysis
     positive_keywords = ['growth', 'profit', 'increase', 'expansion', 'dividend', 'acquisition', 
                          'revenue', 'gain', 'success', 'partnership', 'award', 'milestone',
-                         'improved', 'strong', 'positive', 'progress']
+                         'improved', 'strong', 'positive', 'progress', 'buyback']
     
     negative_keywords = ['loss', 'decline', 'decrease', 'bankruptcy', 'lawsuit', 'penalty',
                         'investigation', 'fraud', 'default', 'resignation', 'closure',
@@ -502,15 +487,15 @@ def analyze_announcement(text, company_name):
     # Determine sentiment
     if positive_count > negative_count:
         sentiment = 'positive'
-        sentiment_text = '📈 POSITIVE NEWS'
+        sentiment_text = '📈 POSITIVE'
     elif negative_count > positive_count:
         sentiment = 'negative'
-        sentiment_text = '📉 NEGATIVE NEWS'
+        sentiment_text = '📉 NEGATIVE'
     else:
         sentiment = 'neutral'
-        sentiment_text = '➖ NEUTRAL NEWS'
+        sentiment_text = '➖ NEUTRAL'
     
-    # Generate summary (simplified - in production, use AI/NLP)
+    # Generate summary
     sentences = re.split(r'[.!?]\s+', text)
     important_sentences = []
     
@@ -519,22 +504,88 @@ def analyze_announcement(text, company_name):
         if any(keyword in sentence_lower for keyword in positive_keywords + negative_keywords):
             if len(sentence.split()) > 5:  # Ensure sentence has substance
                 important_sentences.append(sentence.strip())
-                if len(important_sentences) >= 4:
+                if len(important_sentences) >= 3:
                     break
     
     if not important_sentences:
-        important_sentences = sentences[:4]
+        important_sentences = sentences[:3]
     
     summary_lines = [
         f"{sentiment_text}",
         f"Company: {company_name}",
-        *important_sentences[:3]
+        f"Analysis: Python-based keyword matching",
+        *important_sentences[:2]
     ]
     
     return {
         'summary': '\n'.join(summary_lines),
         'sentiment': sentiment
     }
+
+def analyze_announcement(text, company_name):
+    """Analyze announcement using OpenAI GPT-3.5-turbo with Python fallback"""
+    if not text:
+        return {
+            'summary': f"Unable to extract content from the announcement PDF for {company_name}.",
+            'sentiment': 'neutral'
+        }
+    
+    # Check if OpenAI API key is set
+    if not os.environ.get('OPENAI_API_KEY'):
+        print("⚠️ OPENAI_API_KEY not set, using Python-based analysis")
+        return analyze_with_python(text, company_name)
+    
+    try:
+        
+        # Truncate text to avoid token limits (GPT-3.5-turbo has 4096 token limit)
+        max_chars = 12000  # Roughly 3000 tokens
+        truncated_text = text[:max_chars]
+        
+        print(f"🤖 Sending to OpenAI gpt-4o-mini for analysis...")
+        print(f"   Text length: {len(truncated_text)} characters")
+        
+        # Call OpenAI API with the user's specific prompt
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert stock market analyst. Read the PDF content and suggest Positive, Negative or Neutral. Don't provide any explanation."
+                },
+                {
+                    "role": "user",
+                    "content": f"Company: {company_name}\n\nAnnouncement Content:\n{truncated_text}"
+                }
+            ],
+            temperature=0.3,
+            max_tokens=10  # We only need one word: Positive/Negative/Neutral
+        )
+        
+        # Extract the sentiment from OpenAI response
+        ai_response = response.choices[0].message.content.strip()
+        print(f"✅ OpenAI Response: {ai_response}")
+        
+        # Normalize the response
+        ai_response_lower = ai_response.lower()
+        if 'positive' in ai_response_lower:
+            sentiment = 'positive'
+            sentiment_text = '📈 POSITIVE'
+        elif 'negative' in ai_response_lower:
+            sentiment = 'negative'
+            sentiment_text = '📉 NEGATIVE'
+        else:
+            sentiment = 'neutral'
+            sentiment_text = '➖ NEUTRAL'
+        
+        return {
+            'summary': f"{sentiment_text}\nCompany: {company_name}\nAnalysis: {ai_response}",
+            'sentiment': sentiment
+        }
+        
+    except Exception as e:
+        print(f"❌ Error calling OpenAI API: {str(e)}")
+        print("⚠️ Falling back to Python-based analysis")
+        return analyze_with_python(text, company_name)
 
 @app.route('/')
 def index():
