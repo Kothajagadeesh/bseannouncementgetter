@@ -19,11 +19,25 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import hashlib
 from openai import OpenAI
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+import telegram
+from telegram.error import TelegramError
 
 app = Flask(__name__)
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
+
+# Initialize Slack client
+slack_token = os.environ.get('SLACK_BOT_TOKEN', '')
+slack_channel = os.environ.get('SLACK_CHANNEL', '#bse-announcements')
+slack_client = WebClient(token=slack_token) if slack_token else None
+
+# Initialize Telegram bot
+telegram_token = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+telegram_chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
+telegram_bot = telegram.Bot(token=telegram_token) if telegram_token else None
 
 # Cache for announcements
 announcements_cache = []
@@ -635,6 +649,127 @@ def get_announcements():
         'max_results': max_results
     })
 
+def send_to_slack(company_name, bse_code, sentiment, summary, pdf_url):
+    """Send announcement summary to Slack"""
+    if not slack_client:
+        print("⚠️ Slack not configured (SLACK_BOT_TOKEN not set)")
+        return False
+    
+    try:
+        # Format sentiment with emoji
+        sentiment_emoji = {
+            'positive': '📈 POSITIVE',
+            'negative': '📉 NEGATIVE',
+            'neutral': '➖ NEUTRAL'
+        }.get(sentiment, '❓ UNKNOWN')
+        
+        # Create Slack message blocks for better formatting
+        blocks = [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": f"🔔 {company_name}",
+                    "emoji": True
+                }
+            },
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": f"*BSE Code:*\n{bse_code}"
+                    },
+                    {
+                        "type": "mrkdwn",
+                        "text": f"*Sentiment:*\n{sentiment_emoji}"
+                    }
+                ]
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"*Summary:*\n{summary}"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"<{pdf_url}|📄 View PDF on BSE>"
+                }
+            },
+            {
+                "type": "divider"
+            }
+        ]
+        
+        response = slack_client.chat_postMessage(
+            channel=slack_channel,
+            blocks=blocks,
+            text=f"{company_name} - {sentiment_emoji}"  # Fallback text
+        )
+        
+        print(f"✅ Sent to Slack channel: {slack_channel}")
+        return True
+        
+    except SlackApiError as e:
+        print(f"❌ Slack API Error: {e.response['error']}")
+        return False
+    except Exception as e:
+        print(f"❌ Error sending to Slack: {str(e)}")
+        return False
+
+def send_to_telegram(company_name, bse_code, sentiment, summary, pdf_url):
+    """Send announcement summary to Telegram"""
+    if not telegram_bot or not telegram_chat_id:
+        print("⚠️ Telegram not configured (TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set)")
+        return False
+    
+    try:
+        # Format sentiment with emoji
+        sentiment_emoji = {
+            'positive': '📈 POSITIVE',
+            'negative': '📉 NEGATIVE',
+            'neutral': '➖ NEUTRAL'
+        }.get(sentiment, '❓ UNKNOWN')
+        
+        # Create formatted message
+        message = f"""🔔 *{company_name}*
+
+*BSE Code:* `{bse_code}`
+*Sentiment:* {sentiment_emoji}
+
+*Summary:*
+{summary}
+
+[📄 View PDF on BSE]({pdf_url})"""
+        
+        # Send message using async run in sync context
+        import asyncio
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(
+            telegram_bot.send_message(
+                chat_id=telegram_chat_id,
+                text=message,
+                parse_mode='Markdown',
+                disable_web_page_preview=True
+            )
+        )
+        loop.close()
+        
+        print(f"✅ Sent to Telegram chat: {telegram_chat_id}")
+        return True
+        
+    except TelegramError as e:
+        print(f"❌ Telegram Error: {str(e)}")
+        return False
+    except Exception as e:
+        print(f"❌ Error sending to Telegram: {str(e)}")
+        return False
+
 @app.route('/api/summarize', methods=['POST'])
 def summarize_announcement():
     """API endpoint to summarize an announcement"""
@@ -672,10 +807,35 @@ def summarize_announcement():
     # Analyze and generate summary
     analysis = analyze_announcement(pdf_text, company_name)
     
+    # Send to Slack and Telegram
+    slack_sent = send_to_slack(
+        company_name=company_name,
+        bse_code=bse_code,
+        sentiment=analysis['sentiment'],
+        summary=analysis['summary'],
+        pdf_url=pdf_url
+    )
+    
+    telegram_sent = send_to_telegram(
+        company_name=company_name,
+        bse_code=bse_code,
+        sentiment=analysis['sentiment'],
+        summary=analysis['summary'],
+        pdf_url=pdf_url
+    )
+    
+    # Prepare response with delivery status
+    delivery_status = []
+    if slack_sent:
+        delivery_status.append('Slack')
+    if telegram_sent:
+        delivery_status.append('Telegram')
+    
     return jsonify({
         'success': True,
         'summary': analysis['summary'],
-        'sentiment': analysis['sentiment']
+        'sentiment': analysis['sentiment'],
+        'delivered_to': delivery_status if delivery_status else ['None (configure tokens)']
     })
 
 if __name__ == '__main__':
