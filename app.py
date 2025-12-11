@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, send_file
+from flask import Flask, render_template, jsonify, request, send_file, redirect, url_for, session
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -10,6 +10,10 @@ import PyPDF2
 from urllib.parse import urljoin
 from selenium import webdriver
 from market_cap_data import get_market_cap_with_cache
+import nse_indices
+from integrations import slack_integration, telegram_integration, upstox_integration
+from integrations.slack_integration import send_to_slack
+from integrations.telegram_integration import send_to_telegram
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -19,56 +23,109 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import hashlib
 from openai import OpenAI
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-import telegram
-from telegram.error import TelegramError
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
+import pytz
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
 
-# Initialize Slack client
-slack_token = os.environ.get('SLACK_BOT_TOKEN', '')
-slack_channel = os.environ.get('SLACK_CHANNEL', '#bse-announcements')
-slack_client = WebClient(token=slack_token) if slack_token else None
-
-# Initialize Telegram bot
-telegram_token = os.environ.get('TELEGRAM_BOT_TOKEN', '')
-telegram_chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
-telegram_bot = telegram.Bot(token=telegram_token) if telegram_token else None
+# Third-party integrations are now in integrations module
 
 # Cache for announcements
 announcements_cache = []
+last_refresh_time = None  # Track when data was last refreshed
+
+# Track sent announcements to avoid duplicates (stores BSE code + timestamp hash)
+sent_announcements = set()
+
+# Background scheduler for auto-refresh
+scheduler = BackgroundScheduler(timezone=pytz.timezone('Asia/Kolkata'))
+scheduler.start()
 
 # Load F&O eligible stocks
 fo_stocks_data = None
 fo_bse_codes = set()
 fo_nse_symbols = set()
 
+# NSE Indices data
+nse_indices_data = {}
+nse_symbol_lookup = {}  # Maps NSE symbol to list of indices it belongs to
+bse_to_nse_mapping = {}  # Maps BSE code to NSE symbol
+
 def load_fo_stocks():
-    """Load F&O eligible stocks from JSON file"""
-    global fo_stocks_data, fo_bse_codes, fo_nse_symbols
+    """Load F&O eligible stocks from JSON file (NSE-based)"""
+    global fo_stocks_data, fo_bse_codes, fo_nse_symbols, bse_to_nse_mapping
     
     try:
-        with open('fo_stocks.json', 'r') as f:
+        with open('resources/fo_stocks.json', 'r') as f:
             fo_stocks_data = json.load(f)
             
-        # Create sets for fast lookup
+        # Create sets for fast lookup and BSE to NSE mapping
         for stock in fo_stocks_data['stocks']:
-            fo_bse_codes.add(stock['bse_code'])
-            fo_nse_symbols.add(stock['nse_symbol'])
+            nse_symbol = stock.get('nse_symbol', '')
+            bse_code = stock.get('bse_code', '')
+            
+            # Add NSE symbol (always present in new format)
+            if nse_symbol:
+                fo_nse_symbols.add(nse_symbol)
+            
+            # Add BSE code only if present
+            if bse_code:
+                fo_bse_codes.add(bse_code)
+                bse_to_nse_mapping[bse_code] = nse_symbol
         
-        print(f"✅ Loaded {len(fo_bse_codes)} F&O eligible stocks")
+        print(f"✅ Loaded {len(fo_nse_symbols)} F&O eligible stocks (NSE symbols)")
+        if fo_bse_codes:
+            print(f"   📄 {len(fo_bse_codes)} stocks have BSE codes mapped")
         return True
     except Exception as e:
         print(f"❌ Error loading F&O stocks: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def is_fo_eligible(bse_code):
     """Check if a stock is F&O eligible"""
     return str(bse_code) in fo_bse_codes
+
+def load_nse_indices():
+    """Load NSE indices (Nifty 50, Nifty Next 50, Nifty 500)"""
+    global nse_indices_data, nse_symbol_lookup
+    
+    try:
+        print("\n📊 Loading NSE Indices...")
+        nse_indices_data = nse_indices.get_all_indices()
+        nse_symbol_lookup = nse_indices.create_symbol_lookup()
+        
+        # Count stocks in each index
+        counts = {}
+        for index_name, data in nse_indices_data.items():
+            if data:
+                counts[index_name] = data['count']
+        
+        print(f"✅ Loaded NSE Indices:")
+        print(f"   - Nifty 50: {counts.get('nifty50', 0)} stocks")
+        print(f"   - Nifty Next 50: {counts.get('niftynext50', 0)} stocks")
+        print(f"   - Nifty 500: {counts.get('nifty500', 0)} stocks")
+        print(f"   - Total unique symbols: {len(nse_symbol_lookup)}")
+        return True
+    except Exception as e:
+        print(f"❌ Error loading NSE indices: {str(e)}")
+        return False
+
+def get_stock_indices(nse_symbol):
+    """Get list of indices a stock belongs to"""
+    if not nse_symbol:
+        return []
+    return nse_symbol_lookup.get(nse_symbol.upper(), [])
+
+def get_nse_symbol_from_bse(bse_code):
+    """Get NSE symbol from BSE code"""
+    return bse_to_nse_mapping.get(str(bse_code), None)
 
 def download_pdf_locally(pdf_url, company_name, bse_code):
     """Download PDF from BSE and save locally (only if not already exists)"""
@@ -120,6 +177,120 @@ def download_pdf_locally(pdf_url, company_name, bse_code):
 
 # Load F&O stocks on startup
 load_fo_stocks()
+
+# Load NSE indices on startup
+load_nse_indices()
+
+def create_announcement_id(ann):
+    """Create unique ID for announcement to track if already sent"""
+    return f"{ann['bse_code']}_{ann['raw_timestamp']}"
+
+def is_nifty_index_stock(ann):
+    """Check if announcement is from a Nifty 50, Next 50, or 500 stock"""
+    if not ann.get('nse_indices'):
+        return False
+    indices = ann['nse_indices']
+    return 'NIFTY50' in indices or 'NIFTYNEXT50' in indices or 'NIFTY500' in indices
+
+def auto_check_and_notify():
+    """Auto-check for new announcements and send Nifty index stocks to Slack"""
+    global announcements_cache, sent_announcements, last_refresh_time
+    
+    try:
+        print("\n" + "="*80)
+        print(f"🔄 AUTO-CHECK: {datetime.now().strftime('%Y-%m-%d %H:%M:%S IST')}")
+        print("="*80)
+        
+        # Fetch latest announcements
+        new_announcements = fetch_bse_announcements(days_back=1, max_results=200)
+        
+        if not new_announcements:
+            print("⚠️ No announcements fetched")
+            return
+        
+        # Check for new Nifty index announcements
+        new_count = 0
+        processed_count = 0
+        
+        for ann in new_announcements:
+            ann_id = create_announcement_id(ann)
+            
+            # Skip if already sent
+            if ann_id in sent_announcements:
+                continue
+            
+            new_count += 1
+            
+            # Check if it's a Nifty index stock
+            if is_nifty_index_stock(ann):
+                indices_str = ', '.join(ann.get('nse_indices', []))
+                print(f"\n📊 NEW Index Stock: {ann['company_name']} ({ann['bse_code']})")
+                print(f"   Indices: {indices_str}")
+                print(f"   NSE Symbol: {ann.get('nse_symbol', 'N/A')}")
+                
+                # Auto-summarize and send to Slack
+                if ann.get('pdf_link'):
+                    print(f"   🤖 Auto-summarizing...")
+                    
+                    # Download PDF
+                    local_pdf = download_pdf_locally(
+                        ann['pdf_link'],
+                        ann['company_name'],
+                        ann['bse_code']
+                    )
+                    
+                    if local_pdf:
+                        # Extract text from PDF
+                        text = extract_text_from_pdf(local_pdf)
+                        
+                        if text:
+                            # Analyze announcement
+                            result = analyze_announcement(text, ann['company_name'])
+                            
+                            if result:
+                                # Send to Slack
+                                success = send_to_slack(
+                                    ann['company_name'],
+                                    ann['bse_code'],
+                                    result['sentiment'],
+                                    result['summary'],
+                                    ann['pdf_link'],
+                                    ann.get('date_time', 'N/A')
+                                )
+                                
+                                if success:
+                                    # Mark as sent
+                                    sent_announcements.add(ann_id)
+                                    processed_count += 1
+                                    print(f"   ✅ Sent to Slack successfully")
+                                else:
+                                    print(f"   ❌ Failed to send to Slack")
+                            else:
+                                print(f"   ⚠️ Analysis failed")
+                        else:
+                            print(f"   ⚠️ Could not extract PDF text")
+                    else:
+                        print(f"   ⚠️ Could not download PDF")
+                else:
+                    print(f"   ⚠️ No PDF link available")
+            else:
+                # Non-index stock - just mark as seen, don't send
+                sent_announcements.add(ann_id)
+        
+        print(f"\n📈 Auto-check summary:")
+        print(f"   - Total announcements: {len(new_announcements)}")
+        print(f"   - New announcements: {new_count}")
+        print(f"   - Processed & sent: {processed_count}")
+        print("="*80 + "\n")
+        
+        # Update cache
+        announcements_cache = new_announcements
+        last_refresh_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+    except Exception as e:
+        print(f"❌ Error in auto-check: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
 def get_browser_headers():
     """Returns headers to mimic a real browser"""
@@ -250,6 +421,10 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                         # Check if stock is F&O eligible (for display purposes only)
                         is_fo = is_fo_eligible(bse_code)
                         
+                        # Get NSE symbol and indices information
+                        nse_symbol = get_nse_symbol_from_bse(bse_code)
+                        stock_indices = get_stock_indices(nse_symbol) if nse_symbol else []
+                        
                         # Get market cap category
                         market_cap_info = get_market_cap_with_cache(bse_code) if is_fo else {
                             'category': 'Unknown',
@@ -274,6 +449,8 @@ def fetch_bse_live_api(days_back=1, max_results=200):
                         announcements.append({
                             'company_name': company_name,
                             'bse_code': bse_code,
+                            'nse_symbol': nse_symbol,
+                            'nse_indices': stock_indices,
                             'pdf_link': pdf_link,  # BSE link (primary)
                             'local_pdf_path': local_pdf_path,  # Local file path (if exists from previous download)
                             'date_time': formatted_date,
@@ -463,20 +640,31 @@ def fetch_bse_announcements(days_back=1, max_results=200):
     # Return sample data as last resort
     return get_sample_announcements()
 
-def extract_text_from_pdf(pdf_url):
-    """Extract text from PDF"""
+def extract_text_from_pdf(pdf_source):
+    """Extract text from PDF (supports both local file path and URL)"""
     try:
-        response = requests.get(pdf_url, headers=get_browser_headers(), timeout=30)
-        response.raise_for_status()
-        
-        pdf_file = io.BytesIO(response.content)
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-        
-        text = ""
-        for page in pdf_reader.pages[:5]:  # Read first 5 pages only
-            text += page.extract_text()
-        
-        return text[:5000]  # Limit to 5000 characters
+        # Check if it's a local file path
+        if os.path.exists(pdf_source):
+            # Read from local file
+            with open(pdf_source, 'rb') as f:
+                pdf_reader = PyPDF2.PdfReader(f)
+                text = ""
+                for page in pdf_reader.pages[:5]:  # Read first 5 pages only
+                    text += page.extract_text()
+                return text[:5000]  # Limit to 5000 characters
+        else:
+            # Download from URL
+            response = requests.get(pdf_source, headers=get_browser_headers(), timeout=30)
+            response.raise_for_status()
+            
+            pdf_file = io.BytesIO(response.content)
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            
+            text = ""
+            for page in pdf_reader.pages[:5]:  # Read first 5 pages only
+                text += page.extract_text()
+            
+            return text[:5000]  # Limit to 5000 characters
         
     except Exception as e:
         print(f"Error extracting PDF: {str(e)}")
@@ -623,10 +811,421 @@ def serve_pdf(filepath):
         print(f"Error serving PDF: {str(e)}")
         return jsonify({'error': 'Error loading PDF'}), 500
 
+@app.route('/fando-club')
+def fando_club():
+    """Render the F&O Club calculator page"""
+    return render_template('fando-club.html')
+
+@app.route('/api/options-advisor', methods=['POST'])
+def options_advisor():
+    """AI-powered options trading advisor"""
+    try:
+        data = request.json
+        capital = data.get('capital', 100000)
+        expected_return = data.get('expected_return', 2)  # percentage
+        risk_level = data.get('risk_level', 'moderate')
+        
+        target_amount = (capital * expected_return) / 100
+        
+        print(f"\n🤖 AI Options Advisor Request:")
+        print(f"   Capital: ₹{capital:,}")
+        print(f"   Expected Return: {expected_return}% (₹{target_amount:,})")
+        print(f"   Risk Level: {risk_level}")
+        
+        # Check Upstox authentication
+        if not upstox_integration.is_authenticated():
+            return jsonify({
+                'success': False,
+                'error': 'Upstox not authenticated. Please login first.',
+                'redirect': '/upstox/login'
+            }), 401
+        
+        # Fetch options data for ALL F&O stocks
+        print(f"\n📊 Fetching options data...")
+        options_data = upstox_integration.upstox_client.get_all_fo_options_summary()
+        
+        if isinstance(options_data, dict) and options_data.get('error'):
+            return jsonify({
+                'success': False,
+                'error': options_data['error']
+            }), 500
+        
+        # Prepare context for OpenAI
+        prompt = f"""
+You are a well-planned trader in Indian markets (BSE & NSE). You consider all possible news, market conditions, and technical analysis.
+
+Client Requirements:
+- Capital Available: ₹{capital:,}
+- Target Monthly Return: {expected_return}% (₹{target_amount:,})
+- Risk Tolerance: {risk_level.upper()}
+
+Options Data Available:
+{json.dumps(options_data, indent=2)[:3000]}...
+
+Based on the current market data and options available, provide your top 3-5 trading recommendations.
+
+For each recommendation, specify:
+1. Stock Symbol
+2. Option Type (CE/PE)
+3. Action (BUY/SELL)
+4. Strike Price
+5. Expiry Date
+6. Lot Size
+7. Expected Premium
+8. Expected Profit
+9. Risk Assessment
+10. Reasoning
+
+Format your response as a clear, actionable strategy that a trader can execute immediately.
+"""
+        
+        # Call OpenAI for analysis
+        if not os.environ.get('OPENAI_API_KEY'):
+            return jsonify({
+                'success': False,
+                'error': 'OpenAI API key not configured'
+            }), 500
+        
+        print(f"\n🧠 Sending to OpenAI for analysis...")
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert options trader with deep knowledge of Indian stock markets."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+        
+        ai_recommendations = response.choices[0].message.content
+        print(f"\n✅ AI Analysis Complete")
+        
+        return jsonify({
+            'success': True,
+            'capital': capital,
+            'target_return': target_amount,
+            'risk_level': risk_level,
+            'recommendations': ai_recommendations,
+            'options_data_summary': {
+                'symbols_analyzed': len(options_data),
+                'symbols': list(options_data.keys()) if isinstance(options_data, dict) else []
+            }
+        })
+        
+    except Exception as e:
+        print(f"❌ Error in options advisor: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/options-chain')
+def options_chain_viewer():
+    """Options Chain Viewer UI"""
+    return render_template('options-chain.html')
+
+@app.route('/api/options-chain/<symbol>')
+def api_options_chain(symbol):
+    """API endpoint to fetch options chain with live data"""
+    try:
+        from datetime import datetime
+        import gzip
+        import urllib.request
+        
+        print(f"\n📊 Fetching options chain for {symbol}...")
+        
+        # Download Upstox instruments data
+        url = 'https://assets.upstox.com/market-quote/instruments/exchange/complete.json.gz'
+        response = urllib.request.urlopen(url)
+        compressed_data = response.read()
+        decompressed_data = gzip.decompress(compressed_data)
+        all_instruments = json.loads(decompressed_data)
+        
+        # Find all options for this symbol
+        symbol_options = [
+            item for item in all_instruments
+            if symbol.upper() in item.get('trading_symbol', '')
+            and item.get('instrument_type') in ['CE', 'PE']
+            and item.get('segment') == 'NSE_FO'
+        ]
+        
+        print(f"🔍 Found {len(symbol_options)} total options for {symbol}")
+        
+        # Filter out expired options
+        today = datetime.now()
+        filtered_options = []
+        
+        for option in symbol_options:
+            expiry_timestamp = option.get('expiry')
+            if expiry_timestamp:
+                # Convert milliseconds to datetime
+                expiry_date = datetime.fromtimestamp(expiry_timestamp / 1000)
+                
+                # Only include if expiry is today or future
+                if expiry_date.date() >= today.date():
+                    filtered_options.append(option)
+        
+        print(f"✅ Found {len(filtered_options)} active options (filtered {len(symbol_options) - len(filtered_options)} expired)")
+        
+        # Fetch underlying stock price
+        stock_price_data = None
+        if upstox_integration.is_authenticated():
+            print(f"📊 Fetching underlying stock price for {symbol}...")
+            stock_quotes = upstox_integration.upstox_client.get_market_quotes_multiple([symbol])
+            if stock_quotes and not stock_quotes.get('error'):
+                stock_data_dict = stock_quotes.get('data', {})
+                if stock_data_dict:
+                    # Get first (and only) stock data
+                    stock_price_data = list(stock_data_dict.values())[0] if stock_data_dict else None
+                    if stock_price_data:
+                        print(f"✅ Stock LTP: ₹{stock_price_data.get('last_price', 0)}")
+        
+        # Fetch live market data for options (in batches)
+        if upstox_integration.is_authenticated() and filtered_options:
+            print(f"📈 Fetching live market data...")
+            
+            # Batch fetch market quotes (max 500 at a time)
+            batch_size = 500
+            for i in range(0, len(filtered_options), batch_size):
+                batch = filtered_options[i:i+batch_size]
+                instrument_keys = [opt['instrument_key'] for opt in batch]
+                
+                # Fetch market data using instrument keys directly
+                market_data = upstox_integration.upstox_client.get_quotes_by_instrument_keys(instrument_keys)
+                
+                if market_data and not market_data.get('error'):
+                    # Merge live data into options
+                    data_dict = market_data.get('data', {})
+                    
+                    # Build mapping from instrument_token to quote data
+                    # Response keys are like 'NSE_FO:TCS25DEC2600CE' but contain 'instrument_token' field
+                    token_to_quote = {}
+                    for resp_key, resp_value in data_dict.items():
+                        if isinstance(resp_value, dict) and 'instrument_token' in resp_value:
+                            token_to_quote[resp_value['instrument_token']] = resp_value
+                    
+                    # Map live data back to options
+                    for option in batch:
+                        option_key = option['instrument_key']
+                        if option_key in token_to_quote:
+                            quote = token_to_quote[option_key]
+                            option['last_price'] = quote.get('last_price', 0)
+                            option['volume'] = quote.get('volume', 0)
+                            option['oi'] = quote.get('oi', 0)
+                            option['ohlc'] = quote.get('ohlc', {})
+            
+            print(f"✅ Fetched live data for {len(filtered_options)} options")
+        else:
+            print(f"⚠️ Skipping live data (not authenticated or no options)")
+        
+        return jsonify({
+            'success': True,
+            'symbol': symbol,
+            'total_options': len(filtered_options),
+            'stock_price': stock_price_data,
+            'data': filtered_options
+        })
+        
+    except Exception as e:
+        print(f"❌ Error fetching options chain: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/fo-symbols')
+def api_fo_symbols():
+    """Get list of all F&O symbols for autocomplete"""
+    try:
+        symbols = sorted(list(fo_nse_symbols))
+        return jsonify({
+            'success': True,
+            'symbols': symbols,
+            'total': len(symbols)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/bse-instruments')
+def bse_instruments():
+    """Display BSE instruments browser"""
+    return render_template('bse-instruments.html')
+
+@app.route('/api/bse-instruments')
+def api_bse_instruments():
+    """API endpoint to fetch BSE instruments data"""
+    try:
+        import gzip
+        import urllib.request
+        
+        # Download and parse Upstox instruments data
+        url = 'https://assets.upstox.com/market-quote/instruments/exchange/complete.json.gz'
+        
+        print(f"\n📥 Downloading Upstox instruments data...")
+        response = urllib.request.urlopen(url)
+        compressed_data = response.read()
+        
+        print(f"📦 Decompressing data...")
+        decompressed_data = gzip.decompress(compressed_data)
+        all_instruments = json.loads(decompressed_data)
+        
+        print(f"🔍 Filtering BSE instruments...")
+        bse_instruments = [
+            item for item in all_instruments 
+            if item.get('exchange') == 'BSE'
+        ]
+        
+        print(f"✅ Found {len(bse_instruments)} BSE instruments")
+        
+        return jsonify({
+            'success': True,
+            'total': len(bse_instruments),
+            'data': bse_instruments
+        })
+    except Exception as e:
+        print(f"❌ Error fetching BSE instruments: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/upstox/login')
+def upstox_login():
+    """Initiate Upstox OAuth flow"""
+    redirect_uri = request.url_root + 'upstox/callback'
+    if not upstox_integration.upstox_client.api_key:
+        return jsonify({
+            'error': 'Upstox API Key not configured',
+            'message': 'Please set UPSTOX_API_KEY and UPSTOX_API_SECRET environment variables'
+        }), 500
+    
+    auth_url = upstox_integration.upstox_client.get_authorization_url(redirect_uri)
+    return redirect(auth_url)
+
+@app.route('/upstox/callback')
+def upstox_callback():
+    """Handle Upstox OAuth callback"""
+    auth_code = request.args.get('code')
+    
+    if not auth_code:
+        return jsonify({'error': 'No authorization code received'}), 400
+    
+    redirect_uri = request.url_root + 'upstox/callback'
+    token_data = upstox_integration.upstox_client.get_access_token(auth_code, redirect_uri)
+    
+    if token_data and token_data.get('access_token'):
+        # Store access token in session
+        session['upstox_access_token'] = token_data['access_token']
+        
+        # Also update environment variable for persistence
+        os.environ['UPSTOX_ACCESS_TOKEN'] = token_data['access_token']
+        
+        print(f"✅ Upstox authenticated successfully!")
+        print(f"   Access Token: {token_data['access_token'][:20]}...")
+        
+        return redirect('/upstox/live-data')
+    else:
+        return jsonify({'error': 'Failed to get access token', 'details': token_data}), 500
+
+@app.route('/upstox/live-data')
+def upstox_live_data_page():
+    """Render Upstox live data dashboard"""
+    is_auth = upstox_integration.is_authenticated()
+    return render_template('upstox-live.html', is_authenticated=is_auth)
+
+@app.route('/api/upstox/status')
+def upstox_status():
+    """Check Upstox authentication status"""
+    is_auth = upstox_integration.is_authenticated()
+    
+    status_data = {
+        'authenticated': is_auth,
+        'api_key_set': bool(upstox_integration.upstox_client.api_key)
+    }
+    
+    if is_auth:
+        # Try to fetch user profile
+        profile = upstox_integration.upstox_client.get_user_profile()
+        if not profile.get('error'):
+            status_data['user'] = profile.get('data', {})
+    
+    return jsonify(status_data)
+
+@app.route('/api/upstox/quote/<symbol>')
+def upstox_get_quote(symbol):
+    """Get live market quote for a symbol"""
+    if not upstox_integration.is_authenticated():
+        return jsonify({'error': 'Not authenticated. Please login first.'}), 401
+    
+    quote = upstox_integration.upstox_client.get_market_quote(symbol)
+    return jsonify(quote)
+
+@app.route('/api/upstox/quotes')
+def upstox_get_quotes():
+    """Get live market quotes for multiple symbols"""
+    if not upstox_integration.is_authenticated():
+        return jsonify({'error': 'Not authenticated. Please login first.'}), 401
+    
+    symbols = request.args.get('symbols', '').split(',')
+    if not symbols or not symbols[0]:
+        return jsonify({'error': 'No symbols provided'}), 400
+    
+    quotes = upstox_integration.upstox_client.get_market_quotes_multiple(symbols)
+    return jsonify(quotes)
+
+@app.route('/api/nse-indices')
+def get_nse_indices_api():
+    """API endpoint to get NSE indices data"""
+    return jsonify({
+        'success': True,
+        'data': nse_indices_data,
+        'symbol_count': len(nse_symbol_lookup)
+    })
+
+@app.route('/api/nse-indices/<index_name>')
+def get_specific_index(index_name):
+    """API endpoint to get a specific NSE index"""
+    index_name_lower = index_name.lower()
+    
+    if index_name_lower not in nse_indices_data:
+        return jsonify({'success': False, 'error': 'Index not found'}), 404
+    
+    return jsonify({
+        'success': True,
+        'data': nse_indices_data[index_name_lower]
+    })
+
+@app.route('/api/check-symbol/<symbol>')
+def check_symbol_indices(symbol):
+    """API endpoint to check which indices a symbol belongs to"""
+    indices = get_stock_indices(symbol)
+    
+    return jsonify({
+        'success': True,
+        'symbol': symbol.upper(),
+        'indices': indices,
+        'count': len(indices)
+    })
+
 @app.route('/api/announcements')
 def get_announcements():
     """API endpoint to get announcements"""
-    global announcements_cache
+    global announcements_cache, last_refresh_time
     
     # Get days_back parameter from query string (default: 1 day - today only)
     days_back = request.args.get('days_back', default=1, type=int)
@@ -641,134 +1240,19 @@ def get_announcements():
     # Fetch fresh data
     announcements_cache = fetch_bse_announcements(days_back=days_back, max_results=max_results)
     
+    # Update last refresh time
+    last_refresh_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     return jsonify({
         'success': True,
         'data': announcements_cache,
         'count': len(announcements_cache),
         'days_back': days_back,
-        'max_results': max_results
+        'max_results': max_results,
+        'last_refresh': last_refresh_time
     })
 
-def send_to_slack(company_name, bse_code, sentiment, summary, pdf_url):
-    """Send announcement summary to Slack"""
-    if not slack_client:
-        print("⚠️ Slack not configured (SLACK_BOT_TOKEN not set)")
-        return False
-    
-    try:
-        # Format sentiment with emoji
-        sentiment_emoji = {
-            'positive': '📈 POSITIVE',
-            'negative': '📉 NEGATIVE',
-            'neutral': '➖ NEUTRAL'
-        }.get(sentiment, '❓ UNKNOWN')
-        
-        # Create Slack message blocks for better formatting
-        blocks = [
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": f"🔔 {company_name}",
-                    "emoji": True
-                }
-            },
-            {
-                "type": "section",
-                "fields": [
-                    {
-                        "type": "mrkdwn",
-                        "text": f"*BSE Code:*\n{bse_code}"
-                    },
-                    {
-                        "type": "mrkdwn",
-                        "text": f"*Sentiment:*\n{sentiment_emoji}"
-                    }
-                ]
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"*Summary:*\n{summary}"
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"<{pdf_url}|📄 View PDF on BSE>"
-                }
-            },
-            {
-                "type": "divider"
-            }
-        ]
-        
-        response = slack_client.chat_postMessage(
-            channel=slack_channel,
-            blocks=blocks,
-            text=f"{company_name} - {sentiment_emoji}"  # Fallback text
-        )
-        
-        print(f"✅ Sent to Slack channel: {slack_channel}")
-        return True
-        
-    except SlackApiError as e:
-        print(f"❌ Slack API Error: {e.response['error']}")
-        return False
-    except Exception as e:
-        print(f"❌ Error sending to Slack: {str(e)}")
-        return False
-
-def send_to_telegram(company_name, bse_code, sentiment, summary, pdf_url):
-    """Send announcement summary to Telegram"""
-    if not telegram_bot or not telegram_chat_id:
-        print("⚠️ Telegram not configured (TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set)")
-        return False
-    
-    try:
-        # Format sentiment with emoji
-        sentiment_emoji = {
-            'positive': '📈 POSITIVE',
-            'negative': '📉 NEGATIVE',
-            'neutral': '➖ NEUTRAL'
-        }.get(sentiment, '❓ UNKNOWN')
-        
-        # Create formatted message
-        message = f"""🔔 *{company_name}*
-
-*BSE Code:* `{bse_code}`
-*Sentiment:* {sentiment_emoji}
-
-*Summary:*
-{summary}
-
-[📄 View PDF on BSE]({pdf_url})"""
-        
-        # Send message using async run in sync context
-        import asyncio
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        loop.run_until_complete(
-            telegram_bot.send_message(
-                chat_id=telegram_chat_id,
-                text=message,
-                parse_mode='Markdown',
-                disable_web_page_preview=True
-            )
-        )
-        loop.close()
-        
-        print(f"✅ Sent to Telegram chat: {telegram_chat_id}")
-        return True
-        
-    except TelegramError as e:
-        print(f"❌ Telegram Error: {str(e)}")
-        return False
-    except Exception as e:
-        print(f"❌ Error sending to Telegram: {str(e)}")
-        return False
+# send_to_slack and send_to_telegram are now imported from integrations module
 
 @app.route('/api/summarize', methods=['POST'])
 def summarize_announcement():
@@ -777,6 +1261,7 @@ def summarize_announcement():
     pdf_url = data.get('pdf_link')
     company_name = data.get('company_name')
     bse_code = data.get('bse_code', 'UNKNOWN')
+    announcement_time = data.get('date_time', 'N/A')
     
     if not pdf_url or not company_name:
         return jsonify({
@@ -813,7 +1298,8 @@ def summarize_announcement():
         bse_code=bse_code,
         sentiment=analysis['sentiment'],
         summary=analysis['summary'],
-        pdf_url=pdf_url
+        pdf_url=pdf_url,
+        announcement_time=announcement_time
     )
     
     telegram_sent = send_to_telegram(
@@ -838,5 +1324,60 @@ def summarize_announcement():
         'delivered_to': delivery_status if delivery_status else ['None (configure tokens)']
     })
 
+# Configure auto-refresh scheduler
+# Market hours: 9:00 AM - 3:30 PM IST (every 1 minute)
+# Non-market hours: 3:31 PM - 8:59 AM IST (every 10 minutes)
+
+# Job 1: Every 1 minute during market hours (9:00 AM - 3:30 PM)
+scheduler.add_job(
+    auto_check_and_notify,
+    CronTrigger(
+        hour='9-14',  # 9 AM to 2 PM (every minute)
+        minute='*',
+        timezone='Asia/Kolkata'
+    ),
+    id='market_hours_frequent',
+    name='Market Hours Check (Every 1 min)'
+)
+
+# Job 2: Every 1 minute from 3:00 PM to 3:30 PM
+scheduler.add_job(
+    auto_check_and_notify,
+    CronTrigger(
+        hour='15',  # 3 PM
+        minute='0-30',  # First 30 minutes
+        timezone='Asia/Kolkata'
+    ),
+    id='market_hours_closing',
+    name='Market Closing Hours (Every 1 min)'
+)
+
+# Job 3: Every 10 minutes during non-market hours
+scheduler.add_job(
+    auto_check_and_notify,
+    CronTrigger(
+        minute='*/10',  # Every 10 minutes
+        timezone='Asia/Kolkata'
+    ),
+    id='non_market_hours',
+    name='Non-Market Hours Check (Every 10 min)'
+)
+
+print("\n" + "="*80)
+print("🔔 AUTO-NOTIFICATION SCHEDULER CONFIGURED")
+print("="*80)
+print("🟢 Market Hours (9:00 AM - 3:30 PM IST): Check every 1 minute")
+print("🟡 Non-Market Hours (3:31 PM - 8:59 AM IST): Check every 10 minutes")
+print("🎯 Auto-send to Slack: Nifty 50, Next 50, and 500 stocks only")
+print("="*80 + "\n")
+
+# Run initial check
+print("🚀 Running initial announcement check...")
+auto_check_and_notify()
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    try:
+        app.run(debug=True, host='0.0.0.0', port=5000)
+    finally:
+        # Shutdown scheduler on exit
+        scheduler.shutdown()

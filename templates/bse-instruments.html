@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSE Instruments Browser</title>
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-5px);
+        }
+
+        #loading {
+            text-align: center;
+            padding: 50px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        table.dataTable {
+            width: 100% !important;
+        }
+
+        table.dataTable thead th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+        }
+
+        table.dataTable tbody td {
+            padding: 10px 12px;
+        }
+
+        table.dataTable tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-eq {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-fo {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-f {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-x {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-left: 10px;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Announcements</a>
+        
+        <div class="header">
+            <h1>📊 BSE Instruments Browser</h1>
+            <p class="subtitle">Browse all BSE instruments available on Upstox</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Instruments</div>
+                    <div class="stat-value" id="totalCount">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Data Source</div>
+                    <div class="stat-value" style="font-size: 16px;">Upstox API</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <div id="loading">
+                <div class="spinner"></div>
+                <p>Loading BSE instruments data...</p>
+            </div>
+            
+            <table id="instrumentsTable" class="display" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Trading Symbol</th>
+                        <th>Name</th>
+                        <th>Segment</th>
+                        <th>ISIN</th>
+                        <th>Instrument Type</th>
+                        <th>Instrument Key</th>
+                        <th>Lot Size</th>
+                        <th>Tick Size</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Fetch BSE instruments data
+            fetch('/api/bse-instruments')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Loaded ${data.total} BSE instruments`);
+                        
+                        // Update stats
+                        document.getElementById('totalCount').textContent = data.total.toLocaleString();
+                        
+                        // Populate table
+                        const tbody = document.getElementById('tableBody');
+                        data.data.forEach(item => {
+                            const row = document.createElement('tr');
+                            
+                            // Determine instrument type badge
+                            let typeClass = 'badge-x';
+                            if (item.instrument_type === 'F') typeClass = 'badge-f';
+                            
+                            row.innerHTML = `
+                                <td><strong>${item.trading_symbol || 'N/A'}</strong></td>
+                                <td>${item.name || 'N/A'}</td>
+                                <td><span class="badge badge-eq">${item.segment || 'N/A'}</span></td>
+                                <td><code>${item.isin || 'N/A'}</code></td>
+                                <td><span class="badge ${typeClass}">${item.instrument_type || 'X'}</span></td>
+                                <td><code style="font-size: 11px;">${item.instrument_key || 'N/A'}</code></td>
+                                <td>${item.lot_size || 'N/A'}</td>
+                                <td>₹${item.tick_size || 'N/A'}</td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                        
+                        // Hide loading, show table
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('instrumentsTable').style.display = 'table';
+                        
+                        // Initialize DataTable with column filters
+                        $('#instrumentsTable').DataTable({
+                            pageLength: 25,
+                            order: [[0, 'asc']],
+                            initComplete: function () {
+                                // Add column filters
+                                this.api().columns().every(function () {
+                                    var column = this;
+                                    var header = $(column.header());
+                                    
+                                    // Create filter input
+                                    var input = $('<input type="text" placeholder="Filter..." style="width: 100%; padding: 4px; margin-top: 5px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px;">')
+                                        .appendTo(header)
+                                        .on('click', function(e) {
+                                            e.stopPropagation(); // Prevent sorting when clicking filter
+                                        })
+                                        .on('keyup change clear', function () {
+                                            if (column.search() !== this.value) {
+                                                column.search(this.value).draw();
+                                            }
+                                        });
+                                });
+                            }
+                        });
+                    } else {
+                        document.getElementById('loading').innerHTML = `
+                            <p style="color: #dc2626;">❌ Error loading data: ${data.error}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('loading').innerHTML = `
+                        <p style="color: #dc2626;">❌ Error: ${error.message}</p>
+                    `;
+                });
+        });
+    </script>
+</body>
+</html>

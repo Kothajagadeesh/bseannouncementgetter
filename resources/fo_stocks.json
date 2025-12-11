@@ -1,0 +1,1466 @@
+{
+  "metadata": {
+    "source": "NSE India Official API",
+    "url": "https://www.nseindia.com/api/equity-stockIndices?index=SECURITIES%20IN%20F%26O",
+    "last_updated": "2025-12-11 13:40:23",
+    "total_stocks": 208
+  },
+  "stocks": [
+    {
+      "nse_symbol": "360ONE",
+      "company_name": "360 ONE WAM LIMITED",
+      "isin": "INE466L01038",
+      "bse_code": "",
+      "sector": "Stockbroking & Allied"
+    },
+    {
+      "nse_symbol": "ABB",
+      "company_name": "ABB India Limited",
+      "isin": "INE117A01022",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "ABCAPITAL",
+      "company_name": "Aditya Birla Capital Limited",
+      "isin": "INE674K01013",
+      "bse_code": "",
+      "sector": "Investment Company"
+    },
+    {
+      "nse_symbol": "ADANIENSOL",
+      "company_name": "Adani Energy Solutions Limited",
+      "isin": "INE931S01010",
+      "bse_code": "",
+      "sector": "Power Distribution"
+    },
+    {
+      "nse_symbol": "ADANIENT",
+      "company_name": "Adani Enterprises Limited",
+      "isin": "INE423A01024",
+      "bse_code": "",
+      "sector": "Trading - Minerals"
+    },
+    {
+      "nse_symbol": "ADANIGREEN",
+      "company_name": "Adani Green Energy Limited",
+      "isin": "INE364U01010",
+      "bse_code": "",
+      "sector": "Power Generation"
+    },
+    {
+      "nse_symbol": "ADANIPORTS",
+      "company_name": "Adani Ports and Special Economic Zone Limited",
+      "isin": "INE742F01042",
+      "bse_code": "",
+      "sector": "Port & Port services"
+    },
+    {
+      "nse_symbol": "ALKEM",
+      "company_name": "Alkem Laboratories Limited",
+      "isin": "INE540L01014",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "AMBER",
+      "company_name": "Amber Enterprises India Limited",
+      "isin": "INE371P01015",
+      "bse_code": "",
+      "sector": "Household Appliances"
+    },
+    {
+      "nse_symbol": "AMBUJACEM",
+      "company_name": "Ambuja Cements Limited",
+      "isin": "INE079A01024",
+      "bse_code": "",
+      "sector": "Cement & Cement Products"
+    },
+    {
+      "nse_symbol": "ANGELONE",
+      "company_name": "Angel One Limited",
+      "isin": "INE732I01013",
+      "bse_code": "",
+      "sector": "Stockbroking & Allied"
+    },
+    {
+      "nse_symbol": "APLAPOLLO",
+      "company_name": "APL Apollo Tubes Limited",
+      "isin": "INE702C01027",
+      "bse_code": "",
+      "sector": "Iron & Steel Products"
+    },
+    {
+      "nse_symbol": "APOLLOHOSP",
+      "company_name": "Apollo Hospitals Enterprise Limited",
+      "isin": "INE437A01024",
+      "bse_code": "",
+      "sector": "Hospital"
+    },
+    {
+      "nse_symbol": "ASHOKLEY",
+      "company_name": "Ashok Leyland Limited",
+      "isin": "INE208A01029",
+      "bse_code": "",
+      "sector": "Commercial Vehicles"
+    },
+    {
+      "nse_symbol": "ASIANPAINT",
+      "company_name": "Asian Paints Limited",
+      "isin": "INE021A01026",
+      "bse_code": "",
+      "sector": "Paints"
+    },
+    {
+      "nse_symbol": "ASTRAL",
+      "company_name": "Astral Limited",
+      "isin": "INE006I01046",
+      "bse_code": "",
+      "sector": "Plastic Products - Industrial"
+    },
+    {
+      "nse_symbol": "AUBANK",
+      "company_name": "AU Small Finance Bank Limited",
+      "isin": "INE949L01017",
+      "bse_code": "",
+      "sector": "Other Bank"
+    },
+    {
+      "nse_symbol": "AUROPHARMA",
+      "company_name": "Aurobindo Pharma Limited",
+      "isin": "INE406A01037",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "AXISBANK",
+      "company_name": "Axis Bank Limited",
+      "isin": "INE238A01034",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "BAJAJ-AUTO",
+      "company_name": "Bajaj Auto Limited",
+      "isin": "INE917I01010",
+      "bse_code": "",
+      "sector": "2/3 Wheelers"
+    },
+    {
+      "nse_symbol": "BAJAJFINSV",
+      "company_name": "Bajaj Finserv Limited",
+      "isin": "INE918I01026",
+      "bse_code": "",
+      "sector": "Holding Company"
+    },
+    {
+      "nse_symbol": "BAJFINANCE",
+      "company_name": "Bajaj Finance Limited",
+      "isin": "INE296A01032",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "BANDHANBNK",
+      "company_name": "Bandhan Bank Limited",
+      "isin": "INE545U01014",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "BANKBARODA",
+      "company_name": "Bank of Baroda",
+      "isin": "INE028A01039",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "BANKINDIA",
+      "company_name": "Bank of India",
+      "isin": "INE084A01016",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "BDL",
+      "company_name": "Bharat Dynamics Limited",
+      "isin": "INE171Z01026",
+      "bse_code": "",
+      "sector": "Aerospace & Defense"
+    },
+    {
+      "nse_symbol": "BEL",
+      "company_name": "Bharat Electronics Limited",
+      "isin": "INE263A01024",
+      "bse_code": "",
+      "sector": "Aerospace & Defense"
+    },
+    {
+      "nse_symbol": "BHARATFORG",
+      "company_name": "Bharat Forge Limited",
+      "isin": "INE465A01025",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "BHARTIARTL",
+      "company_name": "Bharti Airtel Limited",
+      "isin": "INE397D01024",
+      "bse_code": "",
+      "sector": "Telecom - Cellular & Fixed line services"
+    },
+    {
+      "nse_symbol": "BHEL",
+      "company_name": "Bharat Heavy Electricals Limited",
+      "isin": "INE257A01026",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "BIOCON",
+      "company_name": "Biocon Limited",
+      "isin": "INE376G01013",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "BLUESTARCO",
+      "company_name": "Blue Star Limited",
+      "isin": "INE472A01039",
+      "bse_code": "",
+      "sector": "Household Appliances"
+    },
+    {
+      "nse_symbol": "BOSCHLTD",
+      "company_name": "Bosch Limited",
+      "isin": "INE323A01026",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "BPCL",
+      "company_name": "Bharat Petroleum Corporation Limited",
+      "isin": "INE029A01011",
+      "bse_code": "",
+      "sector": "Refineries & Marketing"
+    },
+    {
+      "nse_symbol": "BRITANNIA",
+      "company_name": "Britannia Industries Limited",
+      "isin": "INE216A01030",
+      "bse_code": "",
+      "sector": "Packaged Foods"
+    },
+    {
+      "nse_symbol": "BSE",
+      "company_name": "BSE Limited",
+      "isin": "INE118H01025",
+      "bse_code": "",
+      "sector": "Exchange and Data Platform"
+    },
+    {
+      "nse_symbol": "CAMS",
+      "company_name": "Computer Age Management Services Limited",
+      "isin": "INE596I01020",
+      "bse_code": "",
+      "sector": "Depositories Clearing Houses and Other Intermediaries"
+    },
+    {
+      "nse_symbol": "CANBK",
+      "company_name": "Canara Bank",
+      "isin": "INE476A01022",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "CDSL",
+      "company_name": "Central Depository Services (India) Limited",
+      "isin": "INE736A01011",
+      "bse_code": "",
+      "sector": "Depositories Clearing Houses and Other Intermediaries"
+    },
+    {
+      "nse_symbol": "CGPOWER",
+      "company_name": "CG Power and Industrial Solutions Limited",
+      "isin": "INE067A01029",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "CHOLAFIN",
+      "company_name": "Cholamandalam Investment and Finance Company Limited",
+      "isin": "INE121A01024",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "CIPLA",
+      "company_name": "Cipla Limited",
+      "isin": "INE059A01026",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "COALINDIA",
+      "company_name": "Coal India Limited",
+      "isin": "INE522F01014",
+      "bse_code": "",
+      "sector": "Coal"
+    },
+    {
+      "nse_symbol": "COFORGE",
+      "company_name": "Coforge Limited",
+      "isin": "INE591G01025",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "COLPAL",
+      "company_name": "Colgate Palmolive (India) Limited",
+      "isin": "INE259A01022",
+      "bse_code": "",
+      "sector": "Personal Care"
+    },
+    {
+      "nse_symbol": "CONCOR",
+      "company_name": "Container Corporation of India Limited",
+      "isin": "INE111A01025",
+      "bse_code": "",
+      "sector": "Logistics Solution Provider"
+    },
+    {
+      "nse_symbol": "CROMPTON",
+      "company_name": "Crompton Greaves Consumer Electricals Limited",
+      "isin": "INE299U01018",
+      "bse_code": "",
+      "sector": "Household Appliances"
+    },
+    {
+      "nse_symbol": "CUMMINSIND",
+      "company_name": "Cummins India Limited",
+      "isin": "INE298A01020",
+      "bse_code": "",
+      "sector": "Compressors Pumps & Diesel Engines"
+    },
+    {
+      "nse_symbol": "CYIENT",
+      "company_name": "Cyient Limited",
+      "isin": "INE136B01020",
+      "bse_code": "",
+      "sector": "IT Enabled Services"
+    },
+    {
+      "nse_symbol": "DABUR",
+      "company_name": "Dabur India Limited",
+      "isin": "INE016A01026",
+      "bse_code": "",
+      "sector": "Personal Care"
+    },
+    {
+      "nse_symbol": "DALBHARAT",
+      "company_name": "Dalmia Bharat Limited",
+      "isin": "INE00R701025",
+      "bse_code": "",
+      "sector": "Cement & Cement Products"
+    },
+    {
+      "nse_symbol": "DELHIVERY",
+      "company_name": "Delhivery Limited",
+      "isin": "INE148O01028",
+      "bse_code": "",
+      "sector": "Logistics Solution Provider"
+    },
+    {
+      "nse_symbol": "DIVISLAB",
+      "company_name": "Divi's Laboratories Limited",
+      "isin": "INE361B01024",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "DIXON",
+      "company_name": "Dixon Technologies (India) Limited",
+      "isin": "INE935N01020",
+      "bse_code": "",
+      "sector": "Consumer Electronics"
+    },
+    {
+      "nse_symbol": "DLF",
+      "company_name": "DLF Limited",
+      "isin": "INE271C01023",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "DMART",
+      "company_name": "Avenue Supermarts Limited",
+      "isin": "INE192R01011",
+      "bse_code": "",
+      "sector": "Diversified Retail"
+    },
+    {
+      "nse_symbol": "DRREDDY",
+      "company_name": "Dr. Reddy's Laboratories Limited",
+      "isin": "INE089A01031",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "EICHERMOT",
+      "company_name": "Eicher Motors Limited",
+      "isin": "INE066A01021",
+      "bse_code": "",
+      "sector": "2/3 Wheelers"
+    },
+    {
+      "nse_symbol": "ETERNAL",
+      "company_name": "ETERNAL LIMITED",
+      "isin": "INE758T01015",
+      "bse_code": "",
+      "sector": "E-Retail/ E-Commerce"
+    },
+    {
+      "nse_symbol": "EXIDEIND",
+      "company_name": "Exide Industries Limited",
+      "isin": "INE302A01020",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "FEDERALBNK",
+      "company_name": "The Federal Bank  Limited",
+      "isin": "INE171A01029",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "FORTIS",
+      "company_name": "Fortis Healthcare Limited",
+      "isin": "INE061F01013",
+      "bse_code": "",
+      "sector": "Hospital"
+    },
+    {
+      "nse_symbol": "GAIL",
+      "company_name": "GAIL (India) Limited",
+      "isin": "INE129A01019",
+      "bse_code": "",
+      "sector": "Gas Transmission/Marketing"
+    },
+    {
+      "nse_symbol": "GLENMARK",
+      "company_name": "Glenmark Pharmaceuticals Limited",
+      "isin": "INE935A01035",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "GMRAIRPORT",
+      "company_name": "GMR AIRPORTS LIMITED",
+      "isin": "INE776C01039",
+      "bse_code": "",
+      "sector": "Airport & Airport services"
+    },
+    {
+      "nse_symbol": "GODREJCP",
+      "company_name": "Godrej Consumer Products Limited",
+      "isin": "INE102D01028",
+      "bse_code": "",
+      "sector": "Personal Care"
+    },
+    {
+      "nse_symbol": "GODREJPROP",
+      "company_name": "Godrej Properties Limited",
+      "isin": "INE484J01027",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "GRASIM",
+      "company_name": "Grasim Industries Limited",
+      "isin": "INE047A01021",
+      "bse_code": "",
+      "sector": "Cement & Cement Products"
+    },
+    {
+      "nse_symbol": "HAL",
+      "company_name": "Hindustan Aeronautics Limited",
+      "isin": "INE066F01020",
+      "bse_code": "",
+      "sector": "Aerospace & Defense"
+    },
+    {
+      "nse_symbol": "HAVELLS",
+      "company_name": "Havells India Limited",
+      "isin": "INE176B01034",
+      "bse_code": "",
+      "sector": "Consumer Electronics"
+    },
+    {
+      "nse_symbol": "HCLTECH",
+      "company_name": "HCL Technologies Limited",
+      "isin": "INE860A01027",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "HDFCAMC",
+      "company_name": "HDFC Asset Management Company Limited",
+      "isin": "INE127D01025",
+      "bse_code": "",
+      "sector": "Asset Management Company"
+    },
+    {
+      "nse_symbol": "HDFCBANK",
+      "company_name": "HDFC Bank Limited",
+      "isin": "INE040A01034",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "HDFCLIFE",
+      "company_name": "HDFC Life Insurance Company Limited",
+      "isin": "INE795G01014",
+      "bse_code": "",
+      "sector": "Life Insurance"
+    },
+    {
+      "nse_symbol": "HEROMOTOCO",
+      "company_name": "Hero MotoCorp Limited",
+      "isin": "INE158A01026",
+      "bse_code": "",
+      "sector": "2/3 Wheelers"
+    },
+    {
+      "nse_symbol": "HFCL",
+      "company_name": "HFCL Limited",
+      "isin": "INE548A01028",
+      "bse_code": "",
+      "sector": "Telecom - Infrastructure"
+    },
+    {
+      "nse_symbol": "HINDALCO",
+      "company_name": "Hindalco Industries Limited",
+      "isin": "INE038A01020",
+      "bse_code": "",
+      "sector": "Aluminium"
+    },
+    {
+      "nse_symbol": "HINDPETRO",
+      "company_name": "Hindustan Petroleum Corporation Limited",
+      "isin": "INE094A01015",
+      "bse_code": "",
+      "sector": "Refineries & Marketing"
+    },
+    {
+      "nse_symbol": "HINDUNILVR",
+      "company_name": "Hindustan Unilever Limited",
+      "isin": "INE030A01027",
+      "bse_code": "",
+      "sector": "Diversified FMCG"
+    },
+    {
+      "nse_symbol": "HINDZINC",
+      "company_name": "Hindustan Zinc Limited",
+      "isin": "INE267A01025",
+      "bse_code": "",
+      "sector": "Zinc"
+    },
+    {
+      "nse_symbol": "HUDCO",
+      "company_name": "Housing & Urban Development Corporation Limited",
+      "isin": "INE031A01017",
+      "bse_code": "",
+      "sector": "Financial Institution"
+    },
+    {
+      "nse_symbol": "ICICIBANK",
+      "company_name": "ICICI Bank Limited",
+      "isin": "INE090A01021",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "ICICIGI",
+      "company_name": "ICICI Lombard General Insurance Company Limited",
+      "isin": "INE765G01017",
+      "bse_code": "",
+      "sector": "General Insurance"
+    },
+    {
+      "nse_symbol": "ICICIPRULI",
+      "company_name": "ICICI Prudential Life Insurance Company Limited",
+      "isin": "INE726G01019",
+      "bse_code": "",
+      "sector": "Life Insurance"
+    },
+    {
+      "nse_symbol": "IDEA",
+      "company_name": "Vodafone Idea Limited",
+      "isin": "INE669E01016",
+      "bse_code": "",
+      "sector": "Telecom - Cellular & Fixed line services"
+    },
+    {
+      "nse_symbol": "IDFCFIRSTB",
+      "company_name": "IDFC First Bank Limited",
+      "isin": "INE092T01019",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "IEX",
+      "company_name": "Indian Energy Exchange Limited",
+      "isin": "INE022Q01020",
+      "bse_code": "",
+      "sector": "Exchange and Data Platform"
+    },
+    {
+      "nse_symbol": "IIFL",
+      "company_name": "IIFL Finance Limited",
+      "isin": "INE530B01024",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "INDHOTEL",
+      "company_name": "The Indian Hotels Company Limited",
+      "isin": "INE053A01029",
+      "bse_code": "",
+      "sector": "Hotels & Resorts"
+    },
+    {
+      "nse_symbol": "INDIANB",
+      "company_name": "Indian Bank",
+      "isin": "INE562A01011",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "INDIGO",
+      "company_name": "InterGlobe Aviation Limited",
+      "isin": "INE646L01027",
+      "bse_code": "",
+      "sector": "Airline"
+    },
+    {
+      "nse_symbol": "INDUSINDBK",
+      "company_name": "IndusInd Bank Limited",
+      "isin": "INE095A01012",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "INDUSTOWER",
+      "company_name": "Indus Towers Limited",
+      "isin": "INE121J01017",
+      "bse_code": "",
+      "sector": "Telecom - Infrastructure"
+    },
+    {
+      "nse_symbol": "INFY",
+      "company_name": "Infosys Limited",
+      "isin": "INE009A01021",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "INOXWIND",
+      "company_name": "Inox Wind Limited",
+      "isin": "INE066P01011",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "IOC",
+      "company_name": "Indian Oil Corporation Limited",
+      "isin": "INE242A01010",
+      "bse_code": "",
+      "sector": "Refineries & Marketing"
+    },
+    {
+      "nse_symbol": "IRCTC",
+      "company_name": "Indian Railway Catering And Tourism Corporation Limited",
+      "isin": "INE335Y01020",
+      "bse_code": "",
+      "sector": "Tour Travel Related Services"
+    },
+    {
+      "nse_symbol": "IREDA",
+      "company_name": "Indian Renewable Energy Development Agency Limited",
+      "isin": "INE202E01016",
+      "bse_code": "",
+      "sector": "Financial Institution"
+    },
+    {
+      "nse_symbol": "IRFC",
+      "company_name": "Indian Railway Finance Corporation Limited",
+      "isin": "INE053F01010",
+      "bse_code": "",
+      "sector": "Financial Institution"
+    },
+    {
+      "nse_symbol": "ITC",
+      "company_name": "ITC Limited",
+      "isin": "INE154A01025",
+      "bse_code": "",
+      "sector": "Diversified FMCG"
+    },
+    {
+      "nse_symbol": "JINDALSTEL",
+      "company_name": "JINDAL STEEL LIMITED",
+      "isin": "INE749A01030",
+      "bse_code": "",
+      "sector": "Iron & Steel"
+    },
+    {
+      "nse_symbol": "JIOFIN",
+      "company_name": "Jio Financial Services Limited",
+      "isin": "INE758E01017",
+      "bse_code": "",
+      "sector": "Investment Company"
+    },
+    {
+      "nse_symbol": "JSWENERGY",
+      "company_name": "JSW Energy Limited",
+      "isin": "INE121E01018",
+      "bse_code": "",
+      "sector": "Power Generation"
+    },
+    {
+      "nse_symbol": "JSWSTEEL",
+      "company_name": "JSW Steel Limited",
+      "isin": "INE019A01038",
+      "bse_code": "",
+      "sector": "Iron & Steel"
+    },
+    {
+      "nse_symbol": "JUBLFOOD",
+      "company_name": "Jubilant Foodworks Limited",
+      "isin": "INE797F01020",
+      "bse_code": "",
+      "sector": "Restaurants"
+    },
+    {
+      "nse_symbol": "KALYANKJIL",
+      "company_name": "Kalyan Jewellers India Limited",
+      "isin": "INE303R01014",
+      "bse_code": "",
+      "sector": "Gems Jewellery And Watches"
+    },
+    {
+      "nse_symbol": "KAYNES",
+      "company_name": "Kaynes Technology India Limited",
+      "isin": "INE918Z01012",
+      "bse_code": "",
+      "sector": "Industrial Products"
+    },
+    {
+      "nse_symbol": "KEI",
+      "company_name": "KEI Industries Limited",
+      "isin": "INE878B01027",
+      "bse_code": "",
+      "sector": "Cables - Electricals"
+    },
+    {
+      "nse_symbol": "KFINTECH",
+      "company_name": "Kfin Technologies Limited",
+      "isin": "INE138Y01010",
+      "bse_code": "",
+      "sector": "Depositories Clearing Houses and Other Intermediaries"
+    },
+    {
+      "nse_symbol": "KOTAKBANK",
+      "company_name": "Kotak Mahindra Bank Limited",
+      "isin": "INE237A01028",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "KPITTECH",
+      "company_name": "KPIT Technologies Limited",
+      "isin": "INE04I401011",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "LAURUSLABS",
+      "company_name": "Laurus Labs Limited",
+      "isin": "INE947Q01028",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "LICHSGFIN",
+      "company_name": "LIC Housing Finance Limited",
+      "isin": "INE115A01026",
+      "bse_code": "",
+      "sector": "Housing Finance Company"
+    },
+    {
+      "nse_symbol": "LICI",
+      "company_name": "Life Insurance Corporation Of India",
+      "isin": "INE0J1Y01017",
+      "bse_code": "",
+      "sector": "Life Insurance"
+    },
+    {
+      "nse_symbol": "LODHA",
+      "company_name": "Lodha Developers Limited",
+      "isin": "INE670K01029",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "LT",
+      "company_name": "Larsen & Toubro Limited",
+      "isin": "INE018A01030",
+      "bse_code": "",
+      "sector": "Civil Construction"
+    },
+    {
+      "nse_symbol": "LTF",
+      "company_name": "L&T Finance Limited",
+      "isin": "INE498L01015",
+      "bse_code": "",
+      "sector": "Investment Company"
+    },
+    {
+      "nse_symbol": "LTIM",
+      "company_name": "LTIMindtree Limited",
+      "isin": "INE214T01019",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "LUPIN",
+      "company_name": "Lupin Limited",
+      "isin": "INE326A01037",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "M&M",
+      "company_name": "Mahindra & Mahindra Limited",
+      "isin": "INE101A01026",
+      "bse_code": "",
+      "sector": "Passenger Cars & Utility Vehicles"
+    },
+    {
+      "nse_symbol": "MANAPPURAM",
+      "company_name": "Manappuram Finance Limited",
+      "isin": "INE522D01027",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "MANKIND",
+      "company_name": "Mankind Pharma Limited",
+      "isin": "INE634S01028",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "MARICO",
+      "company_name": "Marico Limited",
+      "isin": "INE196A01026",
+      "bse_code": "",
+      "sector": "Edible Oil"
+    },
+    {
+      "nse_symbol": "MARUTI",
+      "company_name": "Maruti Suzuki India Limited",
+      "isin": "INE585B01010",
+      "bse_code": "",
+      "sector": "Passenger Cars & Utility Vehicles"
+    },
+    {
+      "nse_symbol": "MAXHEALTH",
+      "company_name": "Max Healthcare Institute Limited",
+      "isin": "INE027H01010",
+      "bse_code": "",
+      "sector": "Hospital"
+    },
+    {
+      "nse_symbol": "MAZDOCK",
+      "company_name": "Mazagon Dock Shipbuilders Limited",
+      "isin": "INE249Z01020",
+      "bse_code": "",
+      "sector": "Ship Building & Allied Services"
+    },
+    {
+      "nse_symbol": "MCX",
+      "company_name": "Multi Commodity Exchange of India Limited",
+      "isin": "INE745G01035",
+      "bse_code": "",
+      "sector": "Exchange and Data Platform"
+    },
+    {
+      "nse_symbol": "MFSL",
+      "company_name": "Max Financial Services Limited",
+      "isin": "INE180A01020",
+      "bse_code": "",
+      "sector": "Life Insurance"
+    },
+    {
+      "nse_symbol": "MOTHERSON",
+      "company_name": "Samvardhana Motherson International Limited",
+      "isin": "INE775A01035",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "MPHASIS",
+      "company_name": "MphasiS Limited",
+      "isin": "INE356A01018",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "MUTHOOTFIN",
+      "company_name": "Muthoot Finance Limited",
+      "isin": "INE414G01012",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "NATIONALUM",
+      "company_name": "National Aluminium Company Limited",
+      "isin": "INE139A01034",
+      "bse_code": "",
+      "sector": "Aluminium"
+    },
+    {
+      "nse_symbol": "NAUKRI",
+      "company_name": "Info Edge (India) Limited",
+      "isin": "INE663F01032",
+      "bse_code": "",
+      "sector": "Internet & Catalogue Retail"
+    },
+    {
+      "nse_symbol": "NBCC",
+      "company_name": "NBCC (India) Limited",
+      "isin": "INE095N01031",
+      "bse_code": "",
+      "sector": "Civil Construction"
+    },
+    {
+      "nse_symbol": "NCC",
+      "company_name": "NCC Limited",
+      "isin": "INE868B01028",
+      "bse_code": "",
+      "sector": "Civil Construction"
+    },
+    {
+      "nse_symbol": "NESTLEIND",
+      "company_name": "Nestle India Limited",
+      "isin": "INE239A01024",
+      "bse_code": "",
+      "sector": "Packaged Foods"
+    },
+    {
+      "nse_symbol": "NHPC",
+      "company_name": "NHPC Limited",
+      "isin": "INE848E01016",
+      "bse_code": "",
+      "sector": "Power Generation"
+    },
+    {
+      "nse_symbol": "NMDC",
+      "company_name": "NMDC Limited",
+      "isin": "INE584A01023",
+      "bse_code": "",
+      "sector": "Industrial Minerals"
+    },
+    {
+      "nse_symbol": "NTPC",
+      "company_name": "NTPC Limited",
+      "isin": "INE733E01010",
+      "bse_code": "",
+      "sector": "Power Generation"
+    },
+    {
+      "nse_symbol": "NUVAMA",
+      "company_name": "Nuvama Wealth Management Limited",
+      "isin": "INE531F01015",
+      "bse_code": "",
+      "sector": "Stockbroking & Allied"
+    },
+    {
+      "nse_symbol": "NYKAA",
+      "company_name": "FSN E-Commerce Ventures Limited",
+      "isin": "INE388Y01029",
+      "bse_code": "",
+      "sector": "E-Retail/ E-Commerce"
+    },
+    {
+      "nse_symbol": "OBEROIRLTY",
+      "company_name": "Oberoi Realty Limited",
+      "isin": "INE093I01010",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "OFSS",
+      "company_name": "Oracle Financial Services Software Limited",
+      "isin": "INE881D01027",
+      "bse_code": "",
+      "sector": "Software Products"
+    },
+    {
+      "nse_symbol": "OIL",
+      "company_name": "Oil India Limited",
+      "isin": "INE274J01014",
+      "bse_code": "",
+      "sector": "Oil Exploration & Production"
+    },
+    {
+      "nse_symbol": "ONGC",
+      "company_name": "Oil & Natural Gas Corporation Limited",
+      "isin": "INE213A01029",
+      "bse_code": "",
+      "sector": "Oil Exploration & Production"
+    },
+    {
+      "nse_symbol": "PAGEIND",
+      "company_name": "Page Industries Limited",
+      "isin": "INE761H01022",
+      "bse_code": "",
+      "sector": "Garments & Apparels"
+    },
+    {
+      "nse_symbol": "PATANJALI",
+      "company_name": "Patanjali Foods Limited",
+      "isin": "INE619A01035",
+      "bse_code": "",
+      "sector": "Edible Oil"
+    },
+    {
+      "nse_symbol": "PAYTM",
+      "company_name": "One 97 Communications Limited",
+      "isin": "INE982J01020",
+      "bse_code": "",
+      "sector": "Financial Technology (Fintech)"
+    },
+    {
+      "nse_symbol": "PERSISTENT",
+      "company_name": "Persistent Systems Limited",
+      "isin": "INE262H01021",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "PETRONET",
+      "company_name": "Petronet LNG Limited",
+      "isin": "INE347G01014",
+      "bse_code": "",
+      "sector": "LPG/CNG/PNG/LNG Supplier"
+    },
+    {
+      "nse_symbol": "PFC",
+      "company_name": "Power Finance Corporation Limited",
+      "isin": "INE134E01011",
+      "bse_code": "",
+      "sector": "Financial Institution"
+    },
+    {
+      "nse_symbol": "PGEL",
+      "company_name": "PG Electroplast Limited",
+      "isin": "INE457L01029",
+      "bse_code": "",
+      "sector": "Consumer Electronics"
+    },
+    {
+      "nse_symbol": "PHOENIXLTD",
+      "company_name": "The Phoenix Mills Limited",
+      "isin": "INE211B01039",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "PIDILITIND",
+      "company_name": "Pidilite Industries Limited",
+      "isin": "INE318A01026",
+      "bse_code": "",
+      "sector": "Specialty Chemicals"
+    },
+    {
+      "nse_symbol": "PIIND",
+      "company_name": "PI Industries Limited",
+      "isin": "INE603J01030",
+      "bse_code": "",
+      "sector": "Pesticides & Agrochemicals"
+    },
+    {
+      "nse_symbol": "PNB",
+      "company_name": "Punjab National Bank",
+      "isin": "INE160A01022",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "PNBHOUSING",
+      "company_name": "PNB Housing Finance Limited",
+      "isin": "INE572E01012",
+      "bse_code": "",
+      "sector": "Housing Finance Company"
+    },
+    {
+      "nse_symbol": "POLICYBZR",
+      "company_name": "PB Fintech Limited",
+      "isin": "INE417T01026",
+      "bse_code": "",
+      "sector": "Financial Technology (Fintech)"
+    },
+    {
+      "nse_symbol": "POLYCAB",
+      "company_name": "Polycab India Limited",
+      "isin": "INE455K01017",
+      "bse_code": "",
+      "sector": "Cables - Electricals"
+    },
+    {
+      "nse_symbol": "POWERGRID",
+      "company_name": "Power Grid Corporation of India Limited",
+      "isin": "INE752E01010",
+      "bse_code": "",
+      "sector": "Power - Transmission"
+    },
+    {
+      "nse_symbol": "POWERINDIA",
+      "company_name": "Hitachi Energy India Limited",
+      "isin": "INE07Y701011",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "PPLPHARMA",
+      "company_name": "Piramal Pharma Limited",
+      "isin": "INE0DK501011",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "PRESTIGE",
+      "company_name": "Prestige Estates Projects Limited",
+      "isin": "INE811K01011",
+      "bse_code": "",
+      "sector": "Residential Commercial Projects"
+    },
+    {
+      "nse_symbol": "RBLBANK",
+      "company_name": "RBL Bank Limited",
+      "isin": "INE976G01028",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "RECLTD",
+      "company_name": "REC Limited",
+      "isin": "INE020B01018",
+      "bse_code": "",
+      "sector": "Financial Institution"
+    },
+    {
+      "nse_symbol": "RELIANCE",
+      "company_name": "Reliance Industries Limited",
+      "isin": "INE002A01018",
+      "bse_code": "",
+      "sector": "Refineries & Marketing"
+    },
+    {
+      "nse_symbol": "RVNL",
+      "company_name": "Rail Vikas Nigam Limited",
+      "isin": "INE415G01027",
+      "bse_code": "",
+      "sector": "Civil Construction"
+    },
+    {
+      "nse_symbol": "SAIL",
+      "company_name": "Steel Authority of India Limited",
+      "isin": "INE114A01011",
+      "bse_code": "",
+      "sector": "Iron & Steel"
+    },
+    {
+      "nse_symbol": "SAMMAANCAP",
+      "company_name": "Sammaan Capital Limited",
+      "isin": "INE148I01020",
+      "bse_code": "",
+      "sector": "Housing Finance Company"
+    },
+    {
+      "nse_symbol": "SBICARD",
+      "company_name": "SBI Cards and Payment Services Limited",
+      "isin": "INE018E01016",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "SBILIFE",
+      "company_name": "SBI Life Insurance Company Limited",
+      "isin": "INE123W01016",
+      "bse_code": "",
+      "sector": "Life Insurance"
+    },
+    {
+      "nse_symbol": "SBIN",
+      "company_name": "State Bank of India",
+      "isin": "INE062A01020",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "SHREECEM",
+      "company_name": "SHREE CEMENT LIMITED",
+      "isin": "INE070A01015",
+      "bse_code": "",
+      "sector": "Cement & Cement Products"
+    },
+    {
+      "nse_symbol": "SHRIRAMFIN",
+      "company_name": "Shriram Finance Limited",
+      "isin": "INE721A01047",
+      "bse_code": "",
+      "sector": "Non Banking Financial Company (NBFC)"
+    },
+    {
+      "nse_symbol": "SIEMENS",
+      "company_name": "Siemens Limited",
+      "isin": "INE003A01024",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "SOLARINDS",
+      "company_name": "Solar Industries India Limited",
+      "isin": "INE343H01029",
+      "bse_code": "",
+      "sector": "Explosives"
+    },
+    {
+      "nse_symbol": "SONACOMS",
+      "company_name": "Sona BLW Precision Forgings Limited",
+      "isin": "INE073K01018",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "SRF",
+      "company_name": "SRF Limited",
+      "isin": "INE647A01010",
+      "bse_code": "",
+      "sector": "Specialty Chemicals"
+    },
+    {
+      "nse_symbol": "SUNPHARMA",
+      "company_name": "Sun Pharmaceutical Industries Limited",
+      "isin": "INE044A01036",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "SUPREMEIND",
+      "company_name": "Supreme Industries Limited",
+      "isin": "INE195A01028",
+      "bse_code": "",
+      "sector": "Plastic Products - Industrial"
+    },
+    {
+      "nse_symbol": "SUZLON",
+      "company_name": "Suzlon Energy Limited",
+      "isin": "INE040H01021",
+      "bse_code": "",
+      "sector": "Heavy Electrical Equipment"
+    },
+    {
+      "nse_symbol": "SYNGENE",
+      "company_name": "Syngene International Limited",
+      "isin": "INE398R01022",
+      "bse_code": "",
+      "sector": "Healthcare Research Analytics & Technology"
+    },
+    {
+      "nse_symbol": "TATACONSUM",
+      "company_name": "TATA CONSUMER PRODUCTS LIMITED",
+      "isin": "INE192A01025",
+      "bse_code": "",
+      "sector": "Tea & Coffee"
+    },
+    {
+      "nse_symbol": "TATAELXSI",
+      "company_name": "Tata Elxsi Limited",
+      "isin": "INE670A01012",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "TATAPOWER",
+      "company_name": "Tata Power Company Limited",
+      "isin": "INE245A01021",
+      "bse_code": "",
+      "sector": "Integrated Power Utilities"
+    },
+    {
+      "nse_symbol": "TATASTEEL",
+      "company_name": "Tata Steel Limited",
+      "isin": "INE081A01020",
+      "bse_code": "",
+      "sector": "Iron & Steel"
+    },
+    {
+      "nse_symbol": "TATATECH",
+      "company_name": "Tata Technologies Limited",
+      "isin": "INE142M01025",
+      "bse_code": "",
+      "sector": "IT Enabled Services"
+    },
+    {
+      "nse_symbol": "TCS",
+      "company_name": "Tata Consultancy Services Limited",
+      "isin": "INE467B01029",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "TECHM",
+      "company_name": "Tech Mahindra Limited",
+      "isin": "INE669C01036",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "TIINDIA",
+      "company_name": "Tube Investments of India Limited",
+      "isin": "INE974X01010",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "TITAGARH",
+      "company_name": "TITAGARH RAIL SYSTEMS LIMITED",
+      "isin": "INE615H01020",
+      "bse_code": "",
+      "sector": "Railway Wagons"
+    },
+    {
+      "nse_symbol": "TITAN",
+      "company_name": "Titan Company Limited",
+      "isin": "INE280A01028",
+      "bse_code": "",
+      "sector": "Gems Jewellery And Watches"
+    },
+    {
+      "nse_symbol": "TMPV",
+      "company_name": "Tata Motors Passenger Vehicles Limited",
+      "isin": "INE155A01022",
+      "bse_code": "",
+      "sector": "Passenger Cars & Utility Vehicles"
+    },
+    {
+      "nse_symbol": "TORNTPHARM",
+      "company_name": "Torrent Pharmaceuticals Limited",
+      "isin": "INE685A01028",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    },
+    {
+      "nse_symbol": "TORNTPOWER",
+      "company_name": "Torrent Power Limited",
+      "isin": "INE813H01021",
+      "bse_code": "",
+      "sector": "Integrated Power Utilities"
+    },
+    {
+      "nse_symbol": "TRENT",
+      "company_name": "Trent Limited",
+      "isin": "INE849A01020",
+      "bse_code": "",
+      "sector": "Speciality Retail"
+    },
+    {
+      "nse_symbol": "TVSMOTOR",
+      "company_name": "TVS Motor Company Limited",
+      "isin": "INE494B01023",
+      "bse_code": "",
+      "sector": "2/3 Wheelers"
+    },
+    {
+      "nse_symbol": "ULTRACEMCO",
+      "company_name": "UltraTech Cement Limited",
+      "isin": "INE481G01011",
+      "bse_code": "",
+      "sector": "Cement & Cement Products"
+    },
+    {
+      "nse_symbol": "UNIONBANK",
+      "company_name": "Union Bank of India",
+      "isin": "INE692A01016",
+      "bse_code": "",
+      "sector": "Public Sector Bank"
+    },
+    {
+      "nse_symbol": "UNITDSPR",
+      "company_name": "United Spirits Limited",
+      "isin": "INE854D01024",
+      "bse_code": "",
+      "sector": "Breweries & Distilleries"
+    },
+    {
+      "nse_symbol": "UNOMINDA",
+      "company_name": "UNO Minda Limited",
+      "isin": "INE405E01023",
+      "bse_code": "",
+      "sector": "Auto Components & Equipments"
+    },
+    {
+      "nse_symbol": "UPL",
+      "company_name": "UPL Limited",
+      "isin": "INE628A01036",
+      "bse_code": "",
+      "sector": "Pesticides & Agrochemicals"
+    },
+    {
+      "nse_symbol": "VBL",
+      "company_name": "Varun Beverages Limited",
+      "isin": "INE200M01039",
+      "bse_code": "",
+      "sector": "Other Beverages"
+    },
+    {
+      "nse_symbol": "VEDL",
+      "company_name": "Vedanta Limited",
+      "isin": "INE205A01025",
+      "bse_code": "",
+      "sector": "Diversified Metals"
+    },
+    {
+      "nse_symbol": "VOLTAS",
+      "company_name": "Voltas Limited",
+      "isin": "INE226A01021",
+      "bse_code": "",
+      "sector": "Household Appliances"
+    },
+    {
+      "nse_symbol": "WIPRO",
+      "company_name": "Wipro Limited",
+      "isin": "INE075A01022",
+      "bse_code": "",
+      "sector": "Computers - Software & Consulting"
+    },
+    {
+      "nse_symbol": "YESBANK",
+      "company_name": "Yes Bank Limited",
+      "isin": "INE528G01035",
+      "bse_code": "",
+      "sector": "Private Sector Bank"
+    },
+    {
+      "nse_symbol": "ZYDUSLIFE",
+      "company_name": "Zydus Lifesciences Limited",
+      "isin": "INE010B01027",
+      "bse_code": "",
+      "sector": "Pharmaceuticals"
+    }
+  ]
+}

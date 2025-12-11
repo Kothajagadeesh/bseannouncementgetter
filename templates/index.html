@@ -102,6 +102,51 @@
             transform: translateY(0);
         }
 
+        .filter-pills {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            color: #667eea;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-pill:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-pill.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-pill .count {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .filter-pill.active .count {
+            background: rgba(255,255,255,0.3);
+        }
+
         .table-container {
             background: white;
             border-radius: 15px;
@@ -393,14 +438,55 @@
             <p class="subtitle">Real-time corporate announcements with AI-powered sentiment analysis</p>
 
             <!-- F&O Filter Info Banner -->
-            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 20px; border-radius: 10px; margin: 20px 0; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
-                <span style="font-size: 24px;">🎯</span>
-                <div>
-                    <strong style="font-size: 15px;">F&O Stocks Only</strong>
-                    <div style="font-size: 13px; opacity: 0.9;">Showing announcements from 183 Futures & Options eligible stocks</div>
+            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px 20px; border-radius: 10px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 24px;">🎯</span>
+                    <div>
+                        <strong style="font-size: 15px;">F&O Stocks Only</strong>
+                        <div style="font-size: 13px; opacity: 0.9;">Showing announcements from 208 Futures & Options eligible stocks (NSE Official)</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <a href="/fando-club" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                        🧮 F&O Club
+                    </a>
+                    <a href="/upstox/live-data" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                        📈 Live Data
+                    </a>
+                    <a href="/bse-instruments" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                        📊 BSE Instruments
+                    </a>
+                    <a href="/options-chain" style="background: white; color: #667eea; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'">
+                        📈 Options Chain
+                    </a>
                 </div>
             </div>
         </header>
+
+        <!-- Index Filter Pills -->
+        <div style="background: white; padding: 15px 20px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <span style="font-weight: 600; color: #667eea; font-size: 14px;">📊 Filter by Index:</span>
+                <div class="filter-pills">
+                    <div class="filter-pill active" data-filter="all" onclick="filterByIndex('all')">
+                        🎯 All Stocks
+                        <span class="count" id="count-all">0</span>
+                    </div>
+                    <div class="filter-pill" data-filter="NIFTY50" onclick="filterByIndex('NIFTY50')">
+                        🟢 Nifty 50
+                        <span class="count" id="count-nifty50">0</span>
+                    </div>
+                    <div class="filter-pill" data-filter="NIFTYNEXT50" onclick="filterByIndex('NIFTYNEXT50')">
+                        🟠 Nifty Next 50
+                        <span class="count" id="count-niftynext50">0</span>
+                    </div>
+                    <div class="filter-pill" data-filter="NIFTY500" onclick="filterByIndex('NIFTY500')">
+                        🔵 Nifty 500
+                        <span class="count" id="count-nifty500">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="controls">
             <div class="search-box">
@@ -427,6 +513,10 @@
                 </select>
             </div>
             <button class="refresh-btn" onclick="loadAnnouncements()">🔄 Refresh Data</button>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+                <span style="font-size: 11px; color: #6b7280; font-weight: 500;">Last Refreshed:</span>
+                <span id="lastRefreshTime" style="font-size: 13px; color: #667eea; font-weight: 600;">--:--:--</span>
+            </div>
         </div>
 
         <div class="table-container">
@@ -469,6 +559,7 @@
     <script>
         let allAnnouncements = [];
         let currentCompany = '';
+        let currentFilter = 'all';  // Track current index filter
 
         // Function to calculate relative time
         function getRelativeTime(timestamp) {
@@ -526,12 +617,23 @@
                 const response = await fetch(`/api/announcements?days_back=${daysBack}&max_results=${maxResults}`);
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.success && data.data) {
                     allAnnouncements = data.data;
-                    displayAnnouncements(allAnnouncements);
+                    
+                    // Update filter counts
+                    updateFilterCounts();
+                    
+                    // Apply current filter
+                    filterByIndex(currentFilter);
+                    
+                    // Update last refresh time
+                    if (data.last_refresh) {
+                        document.getElementById('lastRefreshTime').textContent = data.last_refresh;
+                    }
                     
                     // Show success message in console
                     console.log(`✅ Loaded ${data.count} announcements from last ${data.days_back} days`);
+                    console.log(`🕓 Last refreshed: ${data.last_refresh}`);
                 } else {
                     showError('Failed to load announcements');
                 }
@@ -539,6 +641,53 @@
                 console.error('Error loading announcements:', error);
                 showError('Error loading announcements. Please try again.');
             }
+        }
+
+        function filterByIndex(indexName) {
+            currentFilter = indexName;
+            
+            // Update active pill
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${indexName}"]`).classList.add('active');
+            
+            // Filter and display announcements
+            let filtered;
+            if (indexName === 'all') {
+                filtered = allAnnouncements;
+            } else {
+                filtered = allAnnouncements.filter(ann => {
+                    return ann.nse_indices && ann.nse_indices.includes(indexName);
+                });
+            }
+            
+            displayAnnouncements(filtered);
+            console.log(`📊 Filtered to ${indexName}: ${filtered.length} announcements`);
+        }
+
+        function updateFilterCounts() {
+            // Count announcements for each index
+            const counts = {
+                all: allAnnouncements.length,
+                nifty50: 0,
+                niftynext50: 0,
+                nifty500: 0
+            };
+            
+            allAnnouncements.forEach(ann => {
+                if (ann.nse_indices) {
+                    if (ann.nse_indices.includes('NIFTY50')) counts.nifty50++;
+                    if (ann.nse_indices.includes('NIFTYNEXT50')) counts.niftynext50++;
+                    if (ann.nse_indices.includes('NIFTY500')) counts.nifty500++;
+                }
+            });
+            
+            // Update count badges
+            document.getElementById('count-all').textContent = counts.all;
+            document.getElementById('count-nifty50').textContent = counts.nifty50;
+            document.getElementById('count-niftynext50').textContent = counts.niftynext50;
+            document.getElementById('count-nifty500').textContent = counts.nifty500;
         }
 
         function displayAnnouncements(announcements) {
@@ -566,9 +715,23 @@
             tbody.innerHTML = announcements.map((ann, index) => {
                 const relativeTime = getRelativeTime(ann.raw_timestamp);
                 const foBadge = ann.is_fo_eligible ? '<span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-left: 8px;">F&O</span>' : '';
+                
+                // NSE Indices badges with colors
+                const indicesBadges = (ann.nse_indices && ann.nse_indices.length > 0) ? ann.nse_indices.map(idx => {
+                    const colors = {
+                        'NIFTY50': { bg: '#10b981', text: 'white', label: 'N50' },
+                        'NIFTYNEXT50': { bg: '#f59e0b', text: 'white', label: 'Next50' },
+                        'NIFTY500': { bg: '#3b82f6', text: 'white', label: 'N500' }
+                    };
+                    const style = colors[idx] || { bg: '#6b7280', text: 'white', label: idx };
+                    return `<span style="background: ${style.bg}; color: ${style.text}; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 4px;">${style.label}</span>`;
+                }).join('') : '';
+                
+                const nseSymbol = ann.nse_symbol ? `<span style="color: #6b7280; font-size: 11px; margin-left: 8px;">NSE: ${ann.nse_symbol}</span>` : '';
+                
                 return `
                 <tr>
-                    <td class="company-name">${ann.company_name}${foBadge}</td>
+                    <td class="company-name">${ann.company_name}${foBadge}${indicesBadges}<br>${nseSymbol}</td>
                     <td class="time-cell" style="color: #667eea; font-size: 13px;" title="${relativeTime}">
                         <div style="display: flex; align-items: center; gap: 5px;">
                             <span>🕐</span>
@@ -591,7 +754,7 @@
                                 '<span style="color: #999;">N/A</span>')}
                     </td>
                     <td>
-                        <button class="summarize-btn" onclick="summarizeAnnouncement('${ann.pdf_link}', '${ann.company_name.replace(/'/g, "\\'")}', '${ann.bse_code}', ${index})">
+                        <button class="summarize-btn" onclick="summarizeAnnouncement('${ann.pdf_link}', '${ann.company_name.replace(/'/g, "\\'")}', '${ann.bse_code}', '${ann.date_time || 'N/A'}', ${index})">
                             ✨ Summarize
                         </button>
                     </td>
@@ -601,11 +764,20 @@
         }
 
         function filterAnnouncements(searchTerm) {
-            const filtered = allAnnouncements.filter(ann => {
+            // First apply index filter
+            let filtered = currentFilter === 'all' 
+                ? allAnnouncements 
+                : allAnnouncements.filter(ann => ann.nse_indices && ann.nse_indices.includes(currentFilter));
+            
+            // Then apply search filter if there's a search term
+            if (searchTerm) {
                 const term = searchTerm.toLowerCase();
-                return ann.company_name.toLowerCase().includes(term) ||
-                       ann.bse_code.toLowerCase().includes(term);
-            });
+                filtered = filtered.filter(ann => {
+                    return ann.company_name.toLowerCase().includes(term) ||
+                           ann.bse_code.toLowerCase().includes(term);
+                });
+            }
+            
             displayAnnouncements(filtered);
         }
 
@@ -620,7 +792,7 @@
             `;
         }
 
-        async function summarizeAnnouncement(pdfLink, companyName, bseCode, index) {
+        async function summarizeAnnouncement(pdfLink, companyName, bseCode, dateTime, index) {
             if (!pdfLink || pdfLink === 'N/A') {
                 alert('No PDF available for this announcement');
                 return;
@@ -639,7 +811,8 @@
                     body: JSON.stringify({
                         pdf_link: pdfLink,
                         company_name: companyName,
-                        bse_code: bseCode
+                        bse_code: bseCode,
+                        date_time: dateTime
                     })
                 });
 

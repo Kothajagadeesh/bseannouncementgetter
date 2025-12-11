@@ -25,9 +25,13 @@ wheels/
 
 # Environment variables
 .env
+.env.example
 
 # PDF Cache
 announcements_pdfs/
+
+# NSE Indices Cache
+nse_cache/
 
 # IDE
 .vscode/

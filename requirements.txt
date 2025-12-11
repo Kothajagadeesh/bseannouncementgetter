@@ -8,3 +8,4 @@ webdriver-manager==4.0.1
 openai==2.9.0
 slack-sdk==3.27.1
 python-telegram-bot==20.8
+APScheduler==3.10.4

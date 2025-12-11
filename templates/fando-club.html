@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F&O Club - Position Size Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 28px;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-5px);
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            color: #0c4a6e;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .recommendations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .recommendations-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border: none;
+        }
+
+        .recommendations-table th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .recommendations-table th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        .recommendations-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+
+        .recommendations-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .recommendations-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-buy {
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .action-sell {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .option-ce {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .option-pe {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Announcements</a>
+        
+        <!-- AI Options Advisor Section -->
+        <div class="card">
+            <h1 style="color: #667eea; margin-bottom: 10px;">🤖 AI Options Trading Advisor</h1>
+            <p class="subtitle">Get AI-powered recommendations for options trading</p>
+
+            <div class="info-box" style="background: #fef3c7; border-color: #fcd34d;">
+                <p style="color: #78350f;">⚡ <strong>Powered by GPT-4:</strong> Our AI analyzes real-time market data and suggests the best options strategies to meet your target returns.</p>
+            </div>
+
+            <form id="aiAdvisorForm">
+                <div class="form-group">
+                    <label for="aiCapital">💰 Investment Capital</label>
+                    <input 
+                        type="number" 
+                        id="aiCapital" 
+                        name="aiCapital" 
+                        placeholder="Enter capital (e.g., 100000)" 
+                        required
+                        min="10000"
+                        step="1000"
+                        value="100000"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="expectedReturn">🎯 Expected Monthly Return (%)</label>
+                    <select id="expectedReturn" name="expectedReturn" required>
+                        <option value="1">1% - Conservative (Low Risk)</option>
+                        <option value="2" selected>2% - Moderate (Balanced)</option>
+                        <option value="5">5% - Aggressive (Higher Risk)</option>
+                        <option value="10">10% - Very Aggressive (High Risk)</option>
+                    </select>
+                    <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">
+                        Example: 2% of ₹1,00,000 = ₹2,000 per month
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="riskLevel">🎲 Risk Tolerance</label>
+                    <select id="riskLevel" name="riskLevel" required>
+                        <option value="conservative">Conservative - Lower risk, stable returns</option>
+                        <option value="moderate" selected>Moderate - Balanced risk-reward</option>
+                        <option value="aggressive">Aggressive - Higher risk, higher returns</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    🧠 Get AI Recommendations
+                </button>
+            </form>
+
+            <div id="aiResult" style="display: none; margin-top: 30px;">
+                <div style="background: white; border-radius: 10px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📊 AI Trading Recommendations</h3>
+                    <div id="aiRecommendations" style="overflow-x: auto;"></div>
+                    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                        <p style="font-size: 12px; color: #6b7280;">
+                            ⚠️ <strong>Disclaimer:</strong> These are AI-generated recommendations based on current market data. 
+                            Always conduct your own research and consult with a financial advisor before making investment decisions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="aiLoading" style="display: none; text-align: center; margin-top: 20px;">
+                <div class="spinner" style="margin: 0 auto;"></div>
+                <p style="color: #667eea; margin-top: 10px;">Analyzing market data and generating recommendations...</p>
+            </div>
+
+            <div id="aiError" style="display: none; margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to parse AI text and display as structured table
+        function displayRecommendationsTable(text) {
+            const container = document.getElementById('aiRecommendations');
+            
+            // Create table structure
+            let tableHTML = `
+                <table class="recommendations-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Stock Symbol</th>
+                            <th>Option Type</th>
+                            <th>Action</th>
+                            <th>Strike Price</th>
+                            <th>Expiry</th>
+                            <th>Premium</th>
+                            <th>Expected Profit</th>
+                            <th>Risk Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // Parse the recommendations text
+            const recommendations = [];
+            const lines = text.split('\n');
+            let currentRec = {};
+            let recNumber = 0;
+            
+            for (let line of lines) {
+                line = line.trim();
+                
+                // Detect recommendation headers
+                if (line.match(/recommendation\s+(\d+)/i)) {
+                    if (Object.keys(currentRec).length > 0) {
+                        recommendations.push({...currentRec});
+                    }
+                    recNumber++;
+                    currentRec = { number: recNumber };
+                    // Extract stock symbol from header if present
+                    const symbolMatch = line.match(/:\s*([A-Z]+)/i);
+                    if (symbolMatch) currentRec.symbol = symbolMatch[1];
+                }
+                
+                // Extract key information using patterns
+                if (line.match(/stock.*symbol/i) || line.match(/symbol.*:/i)) {
+                    const match = line.match(/([A-Z]{2,15})/);
+                    if (match) currentRec.symbol = match[1];
+                }
+                if (line.match(/option.*type/i) || line.match(/type.*:/i)) {
+                    if (line.match(/call|CE/i)) currentRec.optionType = 'CE';
+                    else if (line.match(/put|PE/i)) currentRec.optionType = 'PE';
+                }
+                if (line.match(/action.*:/i)) {
+                    if (line.match(/buy/i)) currentRec.action = 'BUY';
+                    else if (line.match(/sell/i)) currentRec.action = 'SELL';
+                }
+                if (line.match(/strike.*price/i)) {
+                    const match = line.match(/[₹\$]?\s*([\d,]+)/); 
+                    if (match) currentRec.strike = match[1];
+                }
+                if (line.match(/expiry/i)) {
+                    const match = line.match(/\d{1,2}[\/-]\w{3,9}[\/-]\d{2,4}/);
+                    if (match) currentRec.expiry = match[0];
+                }
+                if (line.match(/premium/i) && !line.match(/expected\s+profit/i)) {
+                    const match = line.match(/[₹\$]?\s*([\d,]+)/); 
+                    if (match) currentRec.premium = match[1];
+                }
+                if (line.match(/expected.*profit/i) || line.match(/profit.*:/i)) {
+                    const match = line.match(/[₹\$]?\s*([\d,]+)/);
+                    if (match) currentRec.profit = match[1];
+                }
+                if (line.match(/risk.*:/i) || line.match(/risk.*assessment/i)) {
+                    if (line.match(/low|conservative/i)) currentRec.risk = 'LOW';
+                    else if (line.match(/moderate|medium/i)) currentRec.risk = 'MODERATE';
+                    else if (line.match(/high|aggressive/i)) currentRec.risk = 'HIGH';
+                }
+            }
+            
+            // Add last recommendation
+            if (Object.keys(currentRec).length > 0) {
+                recommendations.push(currentRec);
+            }
+            
+            // Build table rows
+            if (recommendations.length > 0) {
+                recommendations.forEach(rec => {
+                    const actionClass = rec.action === 'BUY' ? 'action-buy' : 'action-sell';
+                    const optionClass = rec.optionType === 'CE' ? 'option-ce' : 'option-pe';
+                    
+                    tableHTML += `
+                        <tr>
+                            <td><strong>${rec.number || '-'}</strong></td>
+                            <td><strong>${rec.symbol || 'N/A'}</strong></td>
+                            <td><span class="${optionClass}">${rec.optionType || 'N/A'}</span></td>
+                            <td><span class="${actionClass}">${rec.action || 'N/A'}</span></td>
+                            <td>₹${rec.strike || 'N/A'}</td>
+                            <td>${rec.expiry || 'N/A'}</td>
+                            <td>₹${rec.premium || 'N/A'}</td>
+                            <td>₹${rec.profit || 'N/A'}</td>
+                            <td>${rec.risk || 'MODERATE'}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                // Fallback: display text as is if parsing fails
+                tableHTML += `
+                    <tr>
+                        <td colspan="9" style="padding: 20px; text-align: left;">
+                            <div style="white-space: pre-wrap; line-height: 1.6;">${text}</div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+
+        // AI Options Advisor Form Handler
+        document.getElementById('aiAdvisorForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const capital = parseFloat(document.getElementById('aiCapital').value);
+            const expectedReturn = parseFloat(document.getElementById('expectedReturn').value);
+            const riskLevel = document.getElementById('riskLevel').value;
+            
+            if (!capital || !expectedReturn) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Hide previous results/errors
+            document.getElementById('aiResult').style.display = 'none';
+            document.getElementById('aiError').style.display = 'none';
+            
+            // Show loading
+            document.getElementById('aiLoading').style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/options-advisor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        capital: capital,
+                        expected_return: expectedReturn,
+                        risk_level: riskLevel
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading
+                document.getElementById('aiLoading').style.display = 'none';
+                
+                if (data.success) {
+                    // Parse and display recommendations as table
+                    displayRecommendationsTable(data.recommendations);
+                    document.getElementById('aiResult').style.display = 'block';
+                    
+                    // Scroll to results
+                    document.getElementById('aiResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    // Show error
+                    const errorDiv = document.getElementById('aiError');
+                    errorDiv.innerHTML = `
+                        <div style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px;">
+                            ❌ <strong>Error:</strong> ${data.error || 'Failed to get recommendations'}
+                            ${data.redirect ? `<br><br><a href="${data.redirect}" style="color: #991b1b; text-decoration: underline;">Click here to authenticate with Upstox</a>` : ''}
+                        </div>
+                    `;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                // Hide loading
+                document.getElementById('aiLoading').style.display = 'none';
+                
+                // Show error
+                const errorDiv = document.getElementById('aiError');
+                errorDiv.innerHTML = `
+                    <div style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px;">
+                        ❌ <strong>Error:</strong> ${error.message || 'Network error. Please try again.'}
+                    </div>
+                `;
+                errorDiv.style.display = 'block';
+                console.error('AI Advisor Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
